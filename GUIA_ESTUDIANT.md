@@ -55,7 +55,10 @@ Aquesta separació clara permet que els Controladors només hagin de cridar els 
 
 En una SPA, necessitem que el servidor recordi qui som mentre naveguem pels diferents fragments i realitzem accions com publicar un tweet o seguir algú.
 
+> **Revisió important**: Cal comprovar sempre les validacions de sessió i la lògica de control abans de donar per acabat el desenvolupament. Assegureu-vos que cada servlet valida correctament que l'usuari està loguejat, que la sessió no és null i que només es permeten les accions autoritzades.
+
 *   **Creació de la Sessió**: En el Servlet corresponent al Login, quan les credencials són vàlides, es crea una sessió i es guarda l'objecte `User` actiu en aquesta.
+*   **Configuració de la Cookie de Sessió**: A `src/main/java/epaw/lab4/util/SessionConfigListener.java` hi ha un listener amb `@WebListener` que configura la cookie `JSESSIONID` per ser persistent durant 1 hora i marca la cookie com `HttpOnly` per millorar la seguretat.
 *   **Contextualització**: Gràcies a les **Cookies** (gestionades transparentment pel navegador), cada crida AJAX (ja sigui carregar el menú, el timeline o afegir un tweet) viatja amb l'identificador de sessió. El servidor recupera l'usuari actiu i adapta la lògica (ex: un usuari només pot esborrar els seus propis tweets) i la vista (ex: mostrar opcions diferents).
 
 ## ✅ 5. Validació i Resposta
@@ -81,3 +84,5 @@ L'objectiu d'aquesta pràctica és ajudar els estudiants a veure com poden imple
 5.  **Interfície i Menús Dinàmics**: Fer que el menú i les accions visibles variïn segons el rol de l'usuari (Autenticat vs. No Autenticat) modificant el contingut en conseqüència.
 
 Tots els conceptes implementats en aquesta evolució us donaran la base necessària per enfrontar-vos amb garanties al desenvolupament del **Projecte Final** de l'assignatura.
+
+> **Criteri d'avaluació**: Per aprovar l'assignatura cal implementar totes les funcionalitats obligatòries definides a l'enunciat (6 punts sobre 10). A més, cal afegir 3 funcionalitats opcionals: `likes`, `comentaris` i una tercera opció lliure que cal acordar amb el professor (1 punt cada una). Finalment, la memòria s'avaluarà també amb 1 punt.
