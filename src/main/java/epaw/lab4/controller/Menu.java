@@ -9,28 +9,30 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-/**
- * Servlet implementation class Menu
- */
+import epaw.lab4.model.User;
+
 @WebServlet("/Menu")
 public class Menu extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        User user = null;
+        if (session != null) {
+            user = (User) session.getAttribute("user");
+        }
 
-		HttpSession session = request.getSession(false);
-		String view = "MenuNotLogged.html";
+        request.setAttribute("user", user);
 
-		if (session != null && session.getAttribute("user") != null)
-			view = "MenuLogged.html";
+        String view = "MenuNotLogged.jsp";
+        if (user != null) {
+            view = "MenuLogged.jsp";
+        }
 
-		request.getRequestDispatcher(view).forward(request, response);
-	}
+        request.getRequestDispatcher(view).forward(request, response);
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
-
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
 }

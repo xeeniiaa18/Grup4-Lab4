@@ -1,8 +1,20 @@
 CREATE TABLE users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(20) NOT NULL,
-  password VARCHAR(20) NOT NULL,
-  picture VARCHAR(255)
+  username VARCHAR(20) NOT NULL UNIQUE,
+  password VARCHAR(100) NOT NULL,
+  picture VARCHAR(255),
+  email VARCHAR(100) NOT NULL UNIQUE,
+  phone VARCHAR(25),
+  firstName VARCHAR(50) NOT NULL,
+  lastName VARCHAR(50) NOT NULL,
+  dateOfBirth DATE NOT NULL,
+  gender VARCHAR(20),
+  title VARCHAR(50),
+  allergies VARCHAR(500),
+  foodPreferences VARCHAR(500),
+  bio VARCHAR(500),
+  role VARCHAR(20) DEFAULT 'user',
+  verified boolean DEFAULT 0
 );
 
 CREATE TABLE follows (
@@ -13,12 +25,61 @@ CREATE TABLE follows (
   FOREIGN KEY (uid) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE tweets (
+CREATE TABLE posts (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  uid INTEGER,
-  postdatetime TIMESTAMP,
-  content VARCHAR(100),
-  pid INTEGER,
+  uid INTEGER NOT NULL,
+  pid INTEGER,               
+  type VARCHAR(20) NOT NULL,    
+  text VARCHAR(500),            
+  image VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (uid) REFERENCES users (id) ON DELETE CASCADE,
-  FOREIGN KEY (pid) REFERENCES tweets (id) ON DELETE CASCADE
+  FOREIGN KEY (pid) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE recipes (
+  pid INTEGER PRIMARY KEY,
+  title VARCHAR(100) NOT NULL,
+  servings INTEGER,
+  cooking_time INTEGER,        
+  ingredients TEXT,
+  instructions TEXT,
+  FOREIGN KEY (pid) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+  pid INTEGER PRIMARY KEY,       
+  title VARCHAR(100),
+  name VARCHAR(100),             
+  location VARCHAR(150),
+  rating FLOAT,              
+  FOREIGN KEY (pid) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE likes (
+  uid INTEGER NOT NULL,
+  pid INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (uid, pid),
+  FOREIGN KEY (uid) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (pid) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE saved_posts (
+  uid INTEGER NOT NULL,
+  pid INTEGER NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (uid, pid),
+  FOREIGN KEY (uid) REFERENCES users (id) ON DELETE CASCADE,
+  FOREIGN KEY (pid) REFERENCES posts (id) ON DELETE CASCADE
+);
+
+CREATE TABLE notifications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  uid INTEGER NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  message TEXT NOT NULL,
+  is_read BOOLEAN DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (uid) REFERENCES users (id) ON DELETE CASCADE
 );

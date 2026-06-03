@@ -35,12 +35,12 @@ public class UserService {
     public Map<String, String> validate(User user) {
         Map<String, String> errors = new HashMap<>();
 
-        String name = user.getName();
-        if (name == null || name.trim().isEmpty()) {
+        String username = user.getUsername();
+        if (username == null || username.trim().isEmpty()) {
             errors.put("name", "Username cannot be empty.");
-        } else if (name.length() < 5 || name.length() > 20) {
+        } else if (username.length() < 5 || username.length() > 20) {
             errors.put("name", "Username must be between 5 and 20 characters.");
-        } else if (userRepository.existsByUsername(name)) {
+        } else if (userRepository.existsByUsername(username)) {
             errors.put("name", "Username already exists.");
         }
 
@@ -48,6 +48,26 @@ public class UserService {
         if (password == null || !password.matches(PASSWORD_REGEX)) {
             errors.put("password",
                     "Minimum 8 characters, including uppercase, numbers, and a special character (@#$%^&*).");
+        }
+
+        String email = user.getEmail();
+        if (email == null || email.trim().isEmpty()) {
+            errors.put("email", "Email cannot be empty.");
+        }
+
+        String firstName = user.getFirstName();
+        if (firstName == null || firstName.trim().isEmpty()) {
+            errors.put("firstName", "First name cannot be empty.");
+        }
+
+        String lastName = user.getLastName();
+        if (lastName == null || lastName.trim().isEmpty()) {
+            errors.put("lastName", "Last name cannot be empty.");
+        }
+
+        String dob = user.getDateOfBirth();
+        if (dob == null || dob.trim().isEmpty()) {
+            errors.put("dateOfBirth", "Date of birth cannot be empty.");
         }
 
         return errors;
@@ -64,43 +84,47 @@ public class UserService {
     public Map<String, String> login(User user) {
         Map<String, String> errors = new HashMap<>();
         if (!userRepository.checkLogin(user)) {
-            errors.put("password", "The combination of name and password does not match in our dataabase");
+            errors.put("password", "The combination of username and password does not match in our database.");
         }
         return errors;
     }
 
-        // Get all users
+    public void updateProfile(User user) {
+        userRepository.update(user);
+    }
+
+    // Get all users
     public List<User> getAllUsers() {
-    	Optional<List<User>> users = userRepository.findAll();
-    	if (users.isPresent())
-    	    return users.get();
+        Optional<List<User>> users = userRepository.findAll();
+        if (users.isPresent())
+            return users.get();
         return null;
     }
     
     // Get followed users
     public List<User> getFollowedUsers(Integer id, Integer start, Integer end) {
-    	Optional<List<User>> users = userRepository.findFollowed(id,start,end);
-    	if (users.isPresent())
-    	    return users.get();
+        Optional<List<User>> users = userRepository.findFollowed(id,start,end);
+        if (users.isPresent())
+            return users.get();
         return null;
     }
     
     // Get unfollowed users
     public List<User> getNotFollowedUsers(Integer id, Integer start, Integer end) {
-    	Optional<List<User>> users = userRepository.findNotFollowed(id,start,end);
-    	if (users.isPresent())
-    	    return users.get();
+        Optional<List<User>> users = userRepository.findNotFollowed(id,start,end);
+        if (users.isPresent())
+            return users.get();
         return null;
     }
     
     // Follow User
     public void follow(Integer uid,Integer fid) {
-    	userRepository.followUser(uid, fid);
+        userRepository.followUser(uid, fid);
     }
     
     // Unfollow User
     public void unfollow(Integer uid,Integer fid) {
-    	userRepository.unfollowUser(uid, fid);
+        userRepository.unfollowUser(uid, fid);
     }
 
     public String saveProfilePicture(Part filePart, String username) {
@@ -125,6 +149,4 @@ public class UserService {
             return null;
         }
     }
-
-
 }

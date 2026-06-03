@@ -8,18 +8,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import epaw.lab4.model.User;
-import epaw.lab4.service.UserService;
 import epaw.lab4.service.PostService;
 
 import java.io.IOException;
 
-@WebServlet("/Follow")
-public class Follow extends HttpServlet {
+@WebServlet("/DelPost")
+public class DelPost extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    public Follow() {
-        super();
-    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
@@ -28,12 +23,11 @@ public class Follow extends HttpServlet {
             User user = (User) session.getAttribute("user");
             if (user != null) {
                 try {
-                    int targetUserId = Integer.parseInt(request.getParameter("id"));
-                    UserService userService = UserService.getInstance();
-                    userService.follow(user.getId(), targetUserId);
-
-                    // Notify the followed user
-                    PostService.instance().addCustomNotification(targetUserId, "follow", "@" + user.getUsername() + " started following you!");
+                    String idStr = request.getParameter("id");
+                    if (idStr != null && !idStr.trim().isEmpty()) {
+                        int postId = Integer.parseInt(idStr);
+                        PostService.instance().delete(postId, user.getId());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
