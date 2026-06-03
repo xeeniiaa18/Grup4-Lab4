@@ -5,14 +5,16 @@
     <div style="height:5px; background:linear-gradient(90deg, #E46B39, #F4A83F, #CE9C6A);"></div>
 
     <div style="padding: 24px;">
-        <h2 style="margin:0 0 16px; color:#46331F; font-family:'Pacifico', cursive;">🔔 Notifications</h2>
+        <h2 style="margin:0 0 16px; color:#46331F; font-family:'Pacifico', cursive;">
+            <i class="fa fa-bell" style="color:#E46B39;"></i> Notifications
+        </h2>
         
         <hr style="border:none; border-top:1px solid #f0e8df; margin:16px 0;">
 
         <c:choose>
             <c:when test="${empty notifications}">
                 <div style="text-align: center; padding: 40px 20px; color: #CE9C6A;">
-                    <div style="font-size: 48px; margin-bottom: 12px;">📭</div>
+                    <i class="fa fa-inbox" style="font-size:48px; margin-bottom:12px; display:block;"></i>
                     <p style="margin: 0; font-size: 15px; font-weight: 600;">You are all caught up!</p>
                     <p style="margin: 4px 0 0; font-size: 13px; color: #CE9C6A;">When other foodies interact with your posts or follow you, it will show up here.</p>
                 </div>
@@ -22,12 +24,13 @@
                     <c:forEach var="n" items="${notifications}">
                         <div style="display: flex; align-items: flex-start; gap: 12px; padding: 14px; border-radius: 12px; background-color: ${n.read ? '#fafafa' : '#FFF6ED'}; border: 1.5px solid ${n.read ? '#f0e8df' : '#E46B39'}; transition: all 0.2s;">
                             
-                            <div style="font-size: 20px; margin-top: 2px;">
+                        <div style="font-size: 18px; margin-top: 2px; width:24px; text-align:center;">
                                 <c:choose>
-                                    <c:when test="${n.type == 'like'}">❤️</c:when>
-                                    <c:when test="${n.type == 'comment'}">💬</c:when>
-                                    <c:when test="${n.type == 'follow'}">🤝</c:when>
-                                    <c:otherwise>📢</c:otherwise>
+                                    <c:when test="${n.type == 'like'}"><i class="fa fa-heart" style="color:#E46B39;"></i></c:when>
+                                    <c:when test="${n.type == 'comment'}"><i class="fa fa-comment" style="color:#46331F;"></i></c:when>
+                                    <c:when test="${n.type == 'follow'}"><i class="fa fa-user-plus" style="color:#3D7A5A;"></i></c:when>
+                                    <c:when test="${n.type == 'save'}"><i class="fa fa-bookmark" style="color:#F4A83F;"></i></c:when>
+                                    <c:otherwise><i class="fa fa-bell" style="color:#CE9C6A;"></i></c:otherwise>
                                 </c:choose>
                             </div>
                             

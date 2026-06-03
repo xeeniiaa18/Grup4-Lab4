@@ -34,6 +34,7 @@ public class Post implements Serializable {
 
 	// Custom stats
 	private int likesCount = 0;
+	private int commentsCount = 0;
 	private boolean likedByCurrentUser = false;
 	private boolean savedByCurrentUser = false;
 
@@ -207,6 +208,14 @@ public class Post implements Serializable {
 
 	public void setLikesCount(int likesCount) {
 		this.likesCount = likesCount;
+	}
+
+	public int getCommentsCount() {
+		return commentsCount;
+	}
+
+	public void setCommentsCount(int commentsCount) {
+		this.commentsCount = commentsCount;
 	}
 
 	public boolean isLikedByCurrentUser() {

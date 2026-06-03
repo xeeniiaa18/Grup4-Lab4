@@ -29,11 +29,19 @@ public class Posts extends HttpServlet {
 
         String filter = request.getParameter("filter");
         String uidStr = request.getParameter("uid");
+        String pidStr = request.getParameter("pid");
 
         List<Post> posts;
         PostService postService = PostService.instance();
 
-        if ("saved".equalsIgnoreCase(filter) && currentUserId != null) {
+        if ("comments".equalsIgnoreCase(filter) && pidStr != null && !pidStr.trim().isEmpty()) {
+            int pid = Integer.parseInt(pidStr);
+            posts = postService.getCommentsByPost(pid, currentUserId, 0, 50);
+            request.setAttribute("posts", posts);
+            request.setAttribute("user", currentUser);
+            request.getRequestDispatcher("FeedPosts.jsp").forward(request, response);
+            return;
+        } else if ("saved".equalsIgnoreCase(filter) && currentUserId != null) {
             posts = postService.getSavedPosts(currentUserId, 0, 20);
         } else if ("user".equalsIgnoreCase(filter) && uidStr != null && !uidStr.trim().isEmpty()) {
             int uid = Integer.parseInt(uidStr);

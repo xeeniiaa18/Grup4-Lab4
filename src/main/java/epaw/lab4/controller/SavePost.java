@@ -25,7 +25,7 @@ public class SavePost extends HttpServlet {
                     String idStr = request.getParameter("id");
                     if (idStr != null && !idStr.trim().isEmpty()) {
                         int postId = Integer.parseInt(idStr);
-                        PostService.instance().save(user.getId(), postId);
+                        PostService.instance().save(user.getId(), postId, user.getUsername());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

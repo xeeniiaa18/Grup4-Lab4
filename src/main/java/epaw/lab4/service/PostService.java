@@ -60,6 +60,11 @@ public class PostService {
         return posts.orElse(null);
     }
 
+    public List<Post> getCommentsByPost(Integer pid, Integer currentUserId, Integer start, Integer end) {
+        Optional<List<Post>> posts = postRepository.findCommentsByPost(pid, currentUserId, start, end);
+        return posts.orElse(null);
+    }
+
     public void like(Integer uid, Integer pid, String likerUsername) {
         postRepository.likePost(uid, pid);
 
@@ -75,8 +80,15 @@ public class PostService {
         postRepository.unlikePost(uid, pid);
     }
 
-    public void save(Integer uid, Integer pid) {
+    public void save(Integer uid, Integer pid, String saverUsername) {
         postRepository.savePost(uid, pid);
+
+        // Notify post author when someone saves their post
+        Integer postAuthorId = postRepository.getPostAuthorId(pid);
+        if (postAuthorId != null && postAuthorId != uid) {
+            String message = "@" + saverUsername + " saved your post!";
+            postRepository.addNotification(postAuthorId, "save", message);
+        }
     }
 
     public void unsave(Integer uid, Integer pid) {
