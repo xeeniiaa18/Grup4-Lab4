@@ -5,14 +5,16 @@
     <div style="height:5px; background:linear-gradient(90deg, #E46B39, #F4A83F, #CE9C6A);"></div>
 
     <div style="padding: 24px;">
-        <h2 style="margin:0 0 16px; color:#46331F; font-family:'Pacifico', cursive;">👥 Following</h2>
+        <h2 style="margin:0 0 16px; color:#46331F; font-family:'Pacifico', cursive;">
+            <i class="fa fa-users" style="color:#E46B39;"></i> Following
+        </h2>
         
         <hr style="border:none; border-top:1px solid #f0e8df; margin:16px 0;">
 
         <c:choose>
             <c:when test="${empty users}">
                 <div style="text-align: center; padding: 40px 20px; color: #CE9C6A;">
-                    <div style="font-size: 48px; margin-bottom: 12px;">🥗</div>
+                    <i class="fa fa-user-plus" style="font-size:48px; margin-bottom:12px; display:block;"></i>
                     <p style="margin: 0; font-size: 15px; font-weight: 600;">You are not following anyone yet.</p>
                     <p style="margin: 4px 0 0; font-size: 13px; color: #CE9C6A;">Find interesting foodies in the suggestions list on the right and follow them!</p>
                 </div>
@@ -28,8 +30,8 @@
                                         <img src="${u.picture}" class="w3-circle" style="height: 44px; width: 44px; object-fit: cover; border: 2px solid #E46B39;" alt="Avatar">
                                     </c:when>
                                     <c:otherwise>
-                                        <div style="width: 44px; height: 44px; border-radius: 50%; background-color: #FFF6ED; border: 2px solid #E46B39; display: flex; align-items: center; justify-content: center; font-size: 20px;">
-                                            🧑‍🍳
+                                        <div style="width: 44px; height: 44px; border-radius: 50%; background-color: #FFF6ED; border: 2px solid #E46B39; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fa fa-user" style="color:#E46B39;font-size:18px;"></i>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -37,7 +39,7 @@
                                 <div style="display: flex; flex-direction: column; min-width: 0;">
                                     <span style="font-weight: 700; color: #46331F; font-size: 14px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                                         <c:if test="${not empty u.title}">${u.title} </c:if>${u.firstName} ${u.lastName}
-                                        <c:if test="${u.verified}"><span style="font-size: 11px;">✅</span></c:if>
+                                        <c:if test="${u.verified}"><i class="fa fa-check-circle" style="color:#3D7A5A;font-size:11px;" title="Verified"></i></c:if>
                                     </span>
                                     <span style="color: #CE9C6A; font-size: 12px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">
                                         @${u.username}

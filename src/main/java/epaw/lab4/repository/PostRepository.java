@@ -105,12 +105,13 @@ public class PostRepository extends BaseRepository {
                 "rev.title AS review_title, rev.name AS review_name, rev.location, rev.rating, " +
                 "(SELECT COUNT(*) FROM likes WHERE likes.pid = p.id) AS likes_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.pid = p.id AND l.uid = ?) AS liked_by_me, " +
-                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me " +
+                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me, " +
+                "(SELECT COUNT(*) FROM posts c WHERE c.pid = p.id AND c.type = 'comment') AS comments_count " +
                 "FROM posts p " +
                 "INNER JOIN users u ON p.uid = u.id " +
                 "LEFT JOIN recipes r ON p.id = r.pid " +
                 "LEFT JOIN reviews rev ON p.id = rev.pid " +
-                "WHERE p.uid = ? " +
+                "WHERE p.uid = ? AND p.type != 'comment' " +
                 "ORDER BY p.created_at DESC LIMIT ?, ?;";
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setInt(1, currentUserId != null ? currentUserId : 0);
@@ -138,11 +139,13 @@ public class PostRepository extends BaseRepository {
                 "rev.title AS review_title, rev.name AS review_name, rev.location, rev.rating, " +
                 "(SELECT COUNT(*) FROM likes WHERE likes.pid = p.id) AS likes_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.pid = p.id AND l.uid = ?) AS liked_by_me, " +
-                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me " +
+                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me, " +
+                "(SELECT COUNT(*) FROM posts c WHERE c.pid = p.id AND c.type = 'comment') AS comments_count " +
                 "FROM posts p " +
                 "INNER JOIN users u ON p.uid = u.id " +
                 "LEFT JOIN recipes r ON p.id = r.pid " +
                 "LEFT JOIN reviews rev ON p.id = rev.pid " +
+                "WHERE p.type != 'comment' " +
                 "ORDER BY p.created_at DESC LIMIT ?, ?;";
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setInt(1, currentUserId != null ? currentUserId : 0);
@@ -169,7 +172,8 @@ public class PostRepository extends BaseRepository {
                 "rev.title AS review_title, rev.name AS review_name, rev.location, rev.rating, " +
                 "(SELECT COUNT(*) FROM likes WHERE likes.pid = p.id) AS likes_count, " +
                 "(SELECT COUNT(*) FROM likes l WHERE l.pid = p.id AND l.uid = ?) AS liked_by_me, " +
-                "1 AS saved_by_me " +
+                "1 AS saved_by_me, " +
+                "(SELECT COUNT(*) FROM posts c WHERE c.pid = p.id AND c.type = 'comment') AS comments_count " +
                 "FROM saved_posts sp " +
                 "INNER JOIN posts p ON sp.pid = p.id " +
                 "INNER JOIN users u ON p.uid = u.id " +
@@ -218,6 +222,7 @@ public class PostRepository extends BaseRepository {
         post.setLikesCount(rs.getInt("likes_count"));
         post.setLikedByCurrentUser(rs.getInt("liked_by_me") > 0);
         post.setSavedByCurrentUser(rs.getInt("saved_by_me") > 0);
+        post.setCommentsCount(rs.getInt("comments_count"));
 
         if ("recipe".equalsIgnoreCase(post.getType())) {
             post.setTitle(rs.getString("recipe_title"));
@@ -236,6 +241,38 @@ public class PostRepository extends BaseRepository {
         }
 
         return post;
+    }
+
+    public Optional<List<Post>> findCommentsByPost(Integer pid, Integer currentUserId, Integer start, Integer end) {
+        List<Post> posts = new ArrayList<>();
+        String query = "SELECT p.id, p.uid, p.pid, p.type, p.text, p.image, p.created_at, " +
+                "u.username, u.firstName, u.lastName, u.picture AS upicture, " +
+                "NULL AS recipe_title, NULL AS servings, NULL AS cooking_time, NULL AS ingredients, NULL AS instructions, " +
+                "NULL AS review_title, NULL AS review_name, NULL AS location, NULL AS rating, " +
+                "(SELECT COUNT(*) FROM likes WHERE likes.pid = p.id) AS likes_count, " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.pid = p.id AND l.uid = ?) AS liked_by_me, " +
+                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me, " +
+                "0 AS comments_count " +
+                "FROM posts p " +
+                "INNER JOIN users u ON p.uid = u.id " +
+                "WHERE p.pid = ? AND p.type = 'comment' " +
+                "ORDER BY p.created_at ASC LIMIT ?, ?;";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, currentUserId != null ? currentUserId : 0);
+            statement.setInt(2, currentUserId != null ? currentUserId : 0);
+            statement.setInt(3, pid);
+            statement.setInt(4, start);
+            statement.setInt(5, end);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    posts.add(mapResultSetToPost(rs));
+                }
+                return Optional.of(posts);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 
     // Likes management

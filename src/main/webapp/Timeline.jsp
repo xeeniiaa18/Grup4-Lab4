@@ -3,7 +3,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#rcolumn').load('NotFollowed');
     $('#iterator').load('Posts');
     
     // Toggle post creation form
@@ -75,7 +74,7 @@ $(document).ready(function(){
     <c:if test="${not empty user}">
         <button id="btnShowShare" style="background-color: #E46B39; color: white; border: none; border-radius: 20px; padding: 10px 20px; font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(228,107,57,0.25); transition: all 0.2s;"
                 onmouseover="this.style.backgroundColor='#d05325';" onmouseout="this.style.backgroundColor='#E46B39';">
-            <span>➕</span> Share
+            <i class="fa fa-plus"></i> Share
         </button>
     </c:if>
 </div>
@@ -86,12 +85,13 @@ $(document).ready(function(){
         <h3 style="margin: 0 0 16px; font-size: 15px; font-weight: 700; color: #46331F;">What are you cooking up today?</h3>
         
         <form>
-            <div style="margin-bottom: 12px;">
-                <label style="font-size: 12px; font-weight: 600; color: #CE9C6A; display: block; margin-bottom: 4px;">Post Type</label>
+                <div style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; font-weight: 600; color: #CE9C6A; display: block; margin-bottom: 4px;">
+                        <i class="fa fa-tag"></i> Post Type
+                    </label>
                 <select id="postTypeSelect" style="width: 100%; padding: 8px 12px; border: 1.5px solid #CE9C6A; border-radius: 10px; font-size: 13px; outline: none; color: #46331F;">
-                    <option value="comment">💬 Comment / Post</option>
-                    <option value="recipe">🍳 Recipe</option>
-                    <option value="review">📝 Review</option>
+                    <option value="recipe">Recipe</option>
+                    <option value="review">Review</option>
                 </select>
             </div>
 
@@ -138,13 +138,20 @@ $(document).ready(function(){
                     </div>
                 </div>
                 <div style="margin-bottom: 10px;">
-                    <label style="font-size: 12px; font-weight: 600; color: #46331F; display: block; margin-bottom: 4px;">Rating (1 to 5 stars)</label>
+                    <label style="font-size: 12px; font-weight: 600; color: #46331F; display: block; margin-bottom: 4px;">
+                        <i class="fa fa-star"></i> Rating
+                    </label>
                     <select id="reviewRating" style="width: 100%; padding: 8px 12px; border: 1.5px solid #CE9C6A; border-radius: 10px; font-size: 13px; outline: none; color: #46331F;">
-                        <option value="5">⭐⭐⭐⭐⭐ 5/5</option>
-                        <option value="4">⭐⭐⭐⭐ 4/5</option>
-                        <option value="3">⭐⭐⭐ 3/5</option>
-                        <option value="2">⭐⭐ 2/5</option>
-                        <option value="1">⭐ 1/5</option>
+                        <option value="5.0">★★★★★  5.0</option>
+                        <option value="4.5">★★★★½  4.5</option>
+                        <option value="4.0">★★★★    4.0</option>
+                        <option value="3.5">★★★½    3.5</option>
+                        <option value="3.0">★★★      3.0</option>
+                        <option value="2.5">★★½      2.5</option>
+                        <option value="2.0">★★        2.0</option>
+                        <option value="1.5">★½        1.5</option>
+                        <option value="1.0">★          1.0</option>
+                        <option value="0.5">½          0.5</option>
                     </select>
                 </div>
             </div>
@@ -155,9 +162,9 @@ $(document).ready(function(){
                 <textarea id="postContent" placeholder="Describe the recipe, write the review detail, or post a comment..." rows="3" required style="width: 100%; padding: 10px 14px; border: 1.5px solid #CE9C6A; border-radius: 10px; font-size: 13px; outline: none; color: #46331F; resize: vertical;"></textarea>
             </div>
 
-            <div style="display: flex; justify-content: flex-end;">
-                <button type="submit" id="btnSubmitPost" style="background-color: #E46B39; color: white; border: none; border-radius: 10px; padding: 10px 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s;">
-                    Post
+                <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" id="btnSubmitPost" style="background-color: #E46B39; color: white; border: none; border-radius: 10px; padding: 10px 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s; display:flex; align-items:center; gap:6px;">
+                    <i class="fa fa-paper-plane"></i> Post
                 </button>
             </div>
         </form>
