@@ -14,7 +14,8 @@ CREATE TABLE users (
   foodPreferences VARCHAR(500),
   bio VARCHAR(500),
   role VARCHAR(20) DEFAULT 'user',
-  verified boolean DEFAULT 0
+  verified boolean DEFAULT 0,
+  banned BOOLEAN DEFAULT 0
 );
 
 CREATE TABLE follows (
