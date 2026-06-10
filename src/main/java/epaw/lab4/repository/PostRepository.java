@@ -97,6 +97,16 @@ public class PostRepository extends BaseRepository {
         }
     }
 
+    public void adminDelete(Integer id){
+        String query = "DELETE FROM posts WHERE id = ?";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Optional<List<Post>> findByUser(Integer uid, Integer currentUserId, Integer start, Integer end) {
         List<Post> posts = new ArrayList<>();
         String query = "SELECT p.id, p.uid, p.pid, p.type, p.text, p.image, p.created_at, " +

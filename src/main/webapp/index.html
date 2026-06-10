@@ -11,7 +11,8 @@
 	<!-- Google Fonts: Pacifico (titles) + Nunito (body) -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap"
+		rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script>
@@ -70,21 +71,21 @@
 				});
 			});
 			/* Follow user */
-			$(document).on("click", ".followUser", function(event) {
+			$(document).on("click", ".followUser", function (event) {
 				event.preventDefault();
 				$.post("Follow", {
 					id: $(this).parent().attr("id")
-				}, function() {
+				}, function () {
 					$("#content").load("Followed");
 					$("#rcolumn").load("NotFollowed");
 				});
 			});
 			/* UnFollow user */
-			$(document).on("click", ".unfollowUser", function(event) {
+			$(document).on("click", ".unfollowUser", function (event) {
 				event.preventDefault();
 				$.post("Unfollow", {
 					id: $(this).parent().attr("id")
-				}, function() {
+				}, function () {
 					$("#content").load("Followed");
 					$("#rcolumn").load("NotFollowed");
 				});
@@ -98,42 +99,42 @@
 				}
 			}
 			/* Delete post */
-			$(document).on("click", ".delPost", function(event) {
+			$(document).on("click", ".delPost", function (event) {
 				event.preventDefault();
 				var postId = $(this).closest('[id]').attr('id');
 				$.post("DelPost", { id: postId }, refreshFeed);
 			});
 			/* Like post */
-			$(document).on("click", ".likePost", function(event) {
+			$(document).on("click", ".likePost", function (event) {
 				event.preventDefault();
 				var postId = $(this).closest('[id]').attr('id');
 				$.post("LikePost", { id: postId }, refreshFeed);
 			});
 			/* Unlike post */
-			$(document).on("click", ".unlikePost", function(event) {
+			$(document).on("click", ".unlikePost", function (event) {
 				event.preventDefault();
 				var postId = $(this).closest('[id]').attr('id');
 				$.post("UnlikePost", { id: postId }, refreshFeed);
 			});
 			/* Save post */
-			$(document).on("click", ".savePost", function(event) {
+			$(document).on("click", ".savePost", function (event) {
 				event.preventDefault();
 				var postId = $(this).closest('[id]').attr('id');
 				$.post("SavePost", { id: postId }, refreshFeed);
 			});
 			/* Unsave post */
-			$(document).on("click", ".unsavePost", function(event) {
+			$(document).on("click", ".unsavePost", function (event) {
 				event.preventDefault();
 				var postId = $(this).closest('[id]').attr('id');
 				$.post("UnsavePost", { id: postId }, refreshFeed);
 			});
 
 			/* Toggle comments panel */
-			$(document).on("click", ".toggleComments", function(event) {
+			$(document).on("click", ".toggleComments", function (event) {
 				event.preventDefault();
 				var postId = $(this).closest('[id]').attr('id');
 				var panel = $('#comments-panel-' + postId);
-				var list  = $('#comments-list-' + postId);
+				var list = $('#comments-list-' + postId);
 				panel.slideToggle(200);
 				if (!panel.data('loaded')) {
 					list.load('Posts?filter=comments&pid=' + postId);
@@ -142,26 +143,26 @@
 			});
 
 			/* Submit comment via button click */
-			$(document).on("click", ".submitComment", function(event) {
+			$(document).on("click", ".submitComment", function (event) {
 				event.preventDefault();
-				var postId  = $(this).data('pid');
-				var input   = $('#comment-input-' + postId);
+				var postId = $(this).data('pid');
+				var input = $('#comment-input-' + postId);
 				var content = $.trim(input.val());
 				if (!content) return;
-				$.post("AddPost", { type: 'comment', content: content, pid: postId }, function() {
+				$.post("AddPost", { type: 'comment', content: content, pid: postId }, function () {
 					input.val('');
 					$('#comments-list-' + postId).load('Posts?filter=comments&pid=' + postId);
 				});
 			});
 
 			/* Submit comment via Enter key */
-			$(document).on("keydown", "input[id^='comment-input-']", function(event) {
+			$(document).on("keydown", "input[id^='comment-input-']", function (event) {
 				if (event.key === 'Enter') {
 					event.preventDefault();
-					var postId  = this.id.replace('comment-input-', '');
+					var postId = this.id.replace('comment-input-', '');
 					var content = $.trim($(this).val());
 					if (!content) return;
-					$.post("AddPost", { type: 'comment', content: content, pid: postId }, function() {
+					$.post("AddPost", { type: 'comment', content: content, pid: postId }, function () {
 						$('#comment-input-' + postId).val('');
 						$('#comments-list-' + postId).load('Posts?filter=comments&pid=' + postId);
 					});

@@ -22,6 +22,7 @@ public class User implements Serializable {
 	private String bio;
 	private String role = "user";
 	private boolean verified = false;
+	private boolean banned = false;
 
 	public User() {
 		super();
@@ -162,5 +163,13 @@ public class User implements Serializable {
 
 	public void setVerified(boolean verified) {
 		this.verified = verified;
+	}
+
+	public boolean isBanned(){
+		return banned;
+	}
+	
+	public void setBanned(boolean banned){
+		this.banned=banned;
 	}
 }

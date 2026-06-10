@@ -69,6 +69,8 @@ public class UserService {
         if (dob == null || dob.trim().isEmpty()) {
             errors.put("dateOfBirth", "Date of birth cannot be empty.");
         }
+        
+        
 
         return errors;
     }
@@ -85,6 +87,8 @@ public class UserService {
         Map<String, String> errors = new HashMap<>();
         if (!userRepository.checkLogin(user)) {
             errors.put("password", "The combination of username and password does not match in our database.");
+        }else if (user.isBanned()) {
+        errors.put("password", "Your account has been suspended.");
         }
         return errors;
     }
