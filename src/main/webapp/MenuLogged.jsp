@@ -27,19 +27,19 @@
                     <span class="sidebar-text">Notifications</span>
                 </a>
 
-                <a class="menu sidebar-item" href="NotFollowed"
-                    style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:16px;text-decoration:none;color:#46331F;font-weight:600;transition:all 0.2s;"
-                    onmouseover="this.style.backgroundColor='#FFF6ED';"
-                    onmouseout="this.style.backgroundColor='transparent';">
-                    <i class="fa fa-user-plus" style="font-size:17px;width:20px;text-align:center;"></i>
-                    <span class="sidebar-text">Follow</span>
-                </a>
-
                 <a class="menu sidebar-item" href="Followed"
                     style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:16px;text-decoration:none;color:#46331F;font-weight:600;transition:all 0.2s;"
                     onmouseover="this.style.backgroundColor='#FFF6ED';"
                     onmouseout="this.style.backgroundColor='transparent';">
                     <i class="fa fa-users" style="font-size:17px;width:20px;text-align:center;"></i>
+                    <span class="sidebar-text">Following</span>
+                </a>
+
+                <a class="menu sidebar-item" href="Followers"
+                    style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:16px;text-decoration:none;color:#46331F;font-weight:600;transition:all 0.2s;"
+                    onmouseover="this.style.backgroundColor='#FFF6ED';"
+                    onmouseout="this.style.backgroundColor='transparent';">
+                    <i class="fa fa-user-plus" style="font-size:17px;width:20px;text-align:center;"></i>
                     <span class="sidebar-text">Followers</span>
                 </a>
 

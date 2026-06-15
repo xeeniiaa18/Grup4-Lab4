@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <c:if test="${not empty currentUser}">
-<div class="suggestions-card" style="position:sticky;bottom:20px;background-color:#ffffff;border-radius:16px;border:1.5px solid #CE9C6A;padding:20px;box-shadow:0 4px 12px rgba(70,51,31,0.08);margin-top:10px;">
+<div class="suggestions-card" style="position:sticky;bottom:20px;background-color:#ffffff;border-radius:16px;border:1.5px solid #CE9C6A;padding:20px;box-shadow:0 4px 12px rgba(70,51,31,0.08);margin-top:auto;margin-bottom:20px;">
 
     <h3 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#46331F;display:flex;align-items:center;gap:8px;">
         <i class="fa fa-user-plus" style="color:#E46B39;"></i> Suggested for you

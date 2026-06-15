@@ -143,29 +143,7 @@ public class UserRepository extends BaseRepository {
         }
     }
 
-    public List<User> searchByUsername(String query) {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT id, username, firstName, lastName, picture, verified FROM users WHERE username LIKE ? OR firstName LIKE ? OR lastName LIKE ? LIMIT 8";
-        try (PreparedStatement st = db.prepareStatement(sql)) {
-            String like = "%" + query + "%";
-            st.setString(1, like);
-            st.setString(2, like);
-            st.setString(3, like);
-            try (ResultSet rs = st.executeQuery()) {
-                while (rs.next()) {
-                    User u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setUsername(rs.getString("username"));
-                    u.setFirstName(rs.getString("firstName"));
-                    u.setLastName(rs.getString("lastName"));
-                    u.setPicture(rs.getString("picture"));
-                    u.setVerified(rs.getBoolean("verified"));
-                    users.add(u);
-                }
-            }
-        } catch (SQLException e) { e.printStackTrace(); }
-        return users;
-    }
+
 
     public Optional<User> findByName(String username) {
         String query = "SELECT id, username, password, picture, email, phone, firstName, lastName, dateOfBirth, gender, title, allergies, foodPreferences, bio, role, verified, banned FROM users WHERE username = ?";
@@ -304,6 +282,35 @@ public class UserRepository extends BaseRepository {
                 statement.setInt(3, start);
                 statement.setInt(4, end);
             }
+            try (ResultSet rs = statement.executeQuery()) {
+                List<User> users = new ArrayList<>();
+                while (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPicture(rs.getString("picture"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setTitle(rs.getString("title"));
+                    user.setVerified(rs.getBoolean("verified"));
+                    user.setBanned(rs.getBoolean("banned"));
+                    users.add(user);
+                }
+                return Optional.of(users);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    public Optional<List<User>> findFollowers(Integer id, Integer start, Integer end) {
+        String query = "SELECT id, username, picture, firstName, lastName, title, verified, banned " +
+                    "FROM users, follows WHERE id = uid AND fid = ? ORDER BY username LIMIT ?,?;";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.setInt(2, start);
+            statement.setInt(3, end);
             try (ResultSet rs = statement.executeQuery()) {
                 List<User> users = new ArrayList<>();
                 while (rs.next()) {

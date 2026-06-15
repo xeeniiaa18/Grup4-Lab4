@@ -93,6 +93,11 @@ public class UserService {
         return errors;
     }
 
+    public User getUserById(Integer id){
+        Optional <User> user= userRepository.findById(id);
+        return user.orElse(null);
+    }
+
     public void updateProfile(User user) {
         userRepository.update(user);
     }
@@ -112,7 +117,11 @@ public class UserService {
             return users.get();
         return null;
     }
-    
+    public List<User> getFollowers(Integer id, Integer start, Integer end) {
+        Optional<List<User>> users = userRepository.findFollowers(id, start, end);
+        return users.orElse(null);
+    }
+        
     // Get unfollowed users
     public List<User> getNotFollowedUsers(Integer id, Integer start, Integer end) {
         Optional<List<User>> users = userRepository.findNotFollowed(id,start,end);
@@ -138,6 +147,9 @@ public class UserService {
 
         try {
             String fileName = filePart.getSubmittedFileName();
+            if (fileName == null || fileName.trim().isEmpty() || !fileName.contains(".")) {
+                return null;
+            }
             String extension = fileName.substring(fileName.lastIndexOf("."));
             String newFileName = username + extension;
 

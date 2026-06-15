@@ -1,16 +1,19 @@
 package epaw.lab4.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import epaw.lab4.model.User;
 import epaw.lab4.repository.PostRepository;
 import epaw.lab4.repository.UserRepository;
+import epaw.lab4.repository.VerificationRequestRepository;
 import epaw.lab4.service.UserService;
 import epaw.lab4.service.PostService;
 
 import java.io.IOException;
 
+@MultipartConfig
 @WebServlet("/AdminPanel")
 public class AdminPanel extends HttpServlet {
 
@@ -35,6 +38,7 @@ public class AdminPanel extends HttpServlet {
 
         request.setAttribute("users", UserService.getInstance().getAllUsers());
         request.setAttribute("posts", PostService.instance().getAllPosts(admin.getId(), 0, 50));
+        request.setAttribute("verificationRequests", VerificationRequestRepository.getInstance().findAllPending());
         request.getRequestDispatcher("AdminPanel.jsp").forward(request, response);
     }
 
@@ -54,12 +58,15 @@ public class AdminPanel extends HttpServlet {
             case "unban":      UserRepository.getInstance().unbanUser(id);   break;
             case "deleteUser": UserRepository.getInstance().deleteUser(id);  break;
             case "deletePost": PostRepository.getInstance().adminDelete(id); break;
+            case "acceptVerification": VerificationRequestRepository.getInstance().accept(id); break;
+            case "rejectVerification": VerificationRequestRepository.getInstance().reject(id); break;
         }
     }
 
     // Reload the panel data and forward back (don't redirect — AJAX swallows it)
     request.setAttribute("users", UserService.getInstance().getAllUsers());
     request.setAttribute("posts", PostService.instance().getAllPosts(admin.getId(), 0, 50));
+    request.setAttribute("verificationRequests", VerificationRequestRepository.getInstance().findAllPending());
     request.getRequestDispatcher("AdminPanel.jsp").forward(request, response);
 }
 }

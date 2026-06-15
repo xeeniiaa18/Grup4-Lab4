@@ -11,7 +11,9 @@
    ============================================================ */
 
 /* ---- Global Reset & Base ---- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -25,17 +27,31 @@ body {
 }
 
 /* ---- Typography ---- */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: 'Pacifico', cursive;
     color: #46331F;
     margin-top: 0;
 }
 
-p, span, a, button, input, select, textarea, label, li, td, th {
+p,
+span,
+a,
+button,
+input,
+select,
+textarea,
+label,
+li,
+td,
+th {
     font-family: 'Nunito', sans-serif;
 }
 
-/* Utility class for Pacifico on any element */
 .font-pacifico {
     font-family: 'Pacifico', cursive !important;
 }
@@ -44,7 +60,7 @@ p, span, a, button, input, select, textarea, label, li, td, th {
 .forkful-nav {
     background-color: #FFF6ED;
     border-bottom: 2px solid #CE9C6A;
-    min-height: 50px;
+    min-height: 90px;
     z-index: 100;
 }
 
@@ -65,8 +81,6 @@ p, span, a, button, input, select, textarea, label, li, td, th {
 }
 
 /* ---- W3.CSS Overrides ---- */
-
-/* Primary theme colour → Paprika */
 .w3-theme,
 .w3-theme-d1,
 .w3-theme-d2,
@@ -106,19 +120,16 @@ p, span, a, button, input, select, textarea, label, li, td, th {
     border-color: #E46B39 !important;
 }
 
-/* White cards keep white background */
 .w3-white {
     background-color: #ffffff !important;
 }
 
-/* Softer card shadows */
 .w3-card,
 .w3-card-2,
 .w3-card-4 {
     box-shadow: 0 2px 10px rgba(70, 51, 31, 0.09) !important;
 }
 
-/* Rounder corners */
 .w3-round,
 .w3-round-large {
     border-radius: 16px !important;
@@ -159,6 +170,114 @@ input.w3-input:invalid {
     border-left: 4px solid #d9534f !important;
 }
 
+/* ---- Layout: fixed sidebars, scrollable middle ---- */
+.w3-row-padding {
+    display: flex !important;
+    align-items: flex-start;
+    position: relative;
+}
+
+.w3-row-padding>.w3-col.m3 {
+    width: 25% !important;
+    flex-shrink: 0;
+}
+
+.w3-row-padding>.w3-col.m6 {
+    width: 50% !important;
+    flex-shrink: 0;
+}
+
+#lcolumn,
+#rcolumn {
+    position: fixed;
+    top: 90px;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    width: 23%;
+}
+
+#rcolumn {
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 90px);
+}
+
+#content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+/* ---- Responsive: medium screens (tablets ~768–1024px) ---- */
+@media (max-width: 1024px) {
+    .w3-row-padding>.w3-col.m3:last-child {
+        display: none !important;
+    }
+
+    .w3-row-padding>.w3-col.m6 {
+        width: 70% !important;
+    }
+
+    .w3-row-padding>.w3-col.m3:first-child {
+        width: 30% !important;
+    }
+
+    #lcolumn {
+        width: 27%;
+    }
+}
+
+/* ---- Responsive: small screens (phones <768px) ---- */
+@media (max-width: 768px) {
+    .w3-row-padding {
+        flex-direction: column !important;
+    }
+
+    .w3-row-padding>.w3-col.m3,
+    .w3-row-padding>.w3-col.m6 {
+        width: 100% !important;
+    }
+
+    .w3-row-padding>.w3-col.m3 {
+        display: none !important;
+    }
+
+    #lcolumn,
+    #rcolumn {
+        position: static;
+        width: 100%;
+        max-height: none;
+    }
+
+    #content {
+        padding: 0 8px;
+    }
+
+    .header-container {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 14px !important;
+    }
+
+    .header-search {
+        display: none;
+    }
+}
+
+/* ---- Admin Panel ---- */
+@media (max-width: 900px) {
+    .admin-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    td[style*="display:flex"] {
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+}
+
 /* ---- Sidebar / Menu ---- */
 .sidebar-menu a {
     font-family: 'Nunito', sans-serif;
@@ -183,17 +302,26 @@ hr.w3-clear {
     border-top: 1px solid #f0e8df;
 }
 
+/* ---- Hide scrollbar on sidebars ---- */
+#lcolumn::-webkit-scrollbar,
+#rcolumn::-webkit-scrollbar {
+    display: none;
+}
+
 /* ---- Scrollbar (Webkit) ---- */
 ::-webkit-scrollbar {
     width: 6px;
 }
+
 ::-webkit-scrollbar-track {
     background: #FFF6ED;
 }
+
 ::-webkit-scrollbar-thumb {
     background: #CE9C6A;
     border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
     background: #E46B39;
 }

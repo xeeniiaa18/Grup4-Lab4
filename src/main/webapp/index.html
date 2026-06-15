@@ -187,7 +187,7 @@
 	<!-- End Navigation -->
 
 	<!-- Begin Content -->
-	<div class="w3-row-padding" style="margin-top: 70px; margin-bottom: 75px;">
+	<div class="w3-row-padding" style="margin-top: 120px; margin-bottom: 75px;">
 
 		<!-- Left Column -->
 		<div class="w3-container w3-col m3 w3-hide-small">
@@ -203,11 +203,43 @@
 		</div>
 
 	</div>
-	<!-- End Content -->
-	<!-- Footer -->
-	<footer class="forkful-footer w3-bottom">
-		<p>Pompeu Fabra University @2026</p>
-	</footer>
+
+	<!-- Mobile bottom navigation (visible only on small screens) -->
+	<div id="mobile-nav" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:200;
+	     background:#FFF6ED; border-top:2px solid #CE9C6A; padding:6px 0 env(safe-area-inset-bottom);
+	     box-shadow:0 -2px 8px rgba(70,51,31,0.10);">
+		<div style="display:flex; justify-content:space-around; align-items:center;">
+			<a class="menu" href="Content"
+				style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:#46331F;font-size:10px;font-weight:700;padding:4px 10px;">
+				<i class="fa fa-home" style="font-size:20px;color:#E46B39;"></i>Home
+			</a>
+			<a class="menu" href="Posts"
+				style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:#46331F;font-size:10px;font-weight:700;padding:4px 10px;">
+				<i class="fa fa-compass" style="font-size:20px;"></i>Explore
+			</a>
+			<a class="menu" href="Notifications"
+				style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:#46331F;font-size:10px;font-weight:700;padding:4px 10px;">
+				<i class="fa fa-bell" style="font-size:20px;"></i>Alerts
+			</a>
+			<a class="menu" href="Profile"
+				style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:#46331F;font-size:10px;font-weight:700;padding:4px 10px;">
+				<i class="fa fa-user" style="font-size:20px;"></i>Profile
+			</a>
+		</div>
+	</div>
+
+	<script>
+		// Show mobile nav only on small screens
+		function checkMobileNav() {
+			if (window.innerWidth <= 768) {
+				document.getElementById('mobile-nav').style.display = 'block';
+			} else {
+				document.getElementById('mobile-nav').style.display = 'none';
+			}
+		}
+		window.addEventListener('resize', checkMobileNav);
+		document.addEventListener('DOMContentLoaded', checkMobileNav);
+	</script>
 
 </body>
 

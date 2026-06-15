@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-        <div style="padding:30px 40px; background:#FFF6ED; min-height:80vh;">
+        <div style="padding:20px; background:#FFF6ED; min-height:80vh; box-sizing:border-box; max-width:100%;">
 
             <h2 style="font-family:'Pacifico',cursive; color:#46331F; margin-bottom:4px;">
                 <i class="fa fa-shield"></i> Admin Panel
@@ -10,12 +10,81 @@
                 Logged in as <strong>@${sessionScope.user.username}</strong>
             </p>
 
+            <%-- VERIFICATION REQUESTS --%>
+            <c:if test="${not empty verificationRequests}">
+                <h3 style="color:#46331F; border-bottom:2px solid #CE9C6A; padding-bottom:6px;">
+                    <i class="fa fa-shield"></i> Verification Requests
+                    <span style="background:#E46B39;color:white;border-radius:50%;padding:2px 8px;font-size:14px;margin-left:6px;">${verificationRequests.size()}</span>
+                </h3>
+
+                <div class="admin-table-wrapper">
+                <table class="w3-table w3-card w3-white w3-round-large w3-margin-bottom" style="min-width:520px;">
+                    <thead>
+                        <tr style="background:#3D7A5A; color:white; font-weight:700;">
+                            <th style="padding:10px;">User</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="req" items="${verificationRequests}">
+                            <tr style="border-bottom:1px solid #f0e8df;">
+                                <td style="padding:10px; display:flex; align-items:center; gap:10px;">
+                                    <c:choose>
+                                        <c:when test="${not empty req.picture}">
+                                            <img src="${req.picture}" class="w3-circle" style="width:36px;height:36px;object-fit:cover;">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div style="width:36px;height:36px;border-radius:50%;background:#CE9C6A;display:flex;align-items:center;justify-content:center;">
+                                                <i class="fa fa-user" style="color:white;font-size:14px;"></i>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <div>
+                                        <strong style="color:#46331F;">${req.firstName} ${req.lastName}</strong><br>
+                                        <span style="color:#CE9C6A; font-size:12px;">@${req.username}</span>
+                                    </div>
+                                </td>
+                                <td style="color:#46331F; font-size:13px; max-width:300px;">
+                                    <c:choose>
+                                        <c:when test="${empty req.message}"><em style="color:#CE9C6A">No message provided</em></c:when>
+                                        <c:otherwise>${req.message}</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td style="color:#CE9C6A; font-size:12px;">${req.createdAt}</td>
+                                <td style="display:flex; gap:6px; padding:10px;">
+                                    <form class="admin-form" method="post" action="AdminPanel" style="display:inline;">
+                                        <input type="hidden" name="action" value="acceptVerification">
+                                        <input type="hidden" name="id" value="${req.id}">
+                                        <button type="submit" class="w3-button w3-small w3-round"
+                                            style="background:#3D7A5A;color:white;font-size:12px;padding:4px 10px;">
+                                            <i class="fa fa-check"></i> Accept
+                                        </button>
+                                    </form>
+                                    <form class="admin-form" method="post" action="AdminPanel" style="display:inline;">
+                                        <input type="hidden" name="action" value="rejectVerification">
+                                        <input type="hidden" name="id" value="${req.id}">
+                                        <button type="submit" class="w3-button w3-small w3-round"
+                                            style="background:#d9534f;color:white;font-size:12px;padding:4px 10px;">
+                                            <i class="fa fa-times"></i> Reject
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                </div>
+            </c:if>
+
             <%-- USERS --%>
                 <h3 style="color:#46331F; border-bottom:2px solid #CE9C6A; padding-bottom:6px;">
                     <i class="fa fa-users"></i> Users
                 </h3>
 
-                <table class="w3-table w3-card w3-white w3-round-large w3-margin-bottom">
+                <div class="admin-table-wrapper">
+                <table class="w3-table w3-card w3-white w3-round-large w3-margin-bottom" style="min-width:520px;">
                     <thead>
                         <tr style="background:#F4A83F; color:#46331F; font-weight:700;">
                             <th style="padding:10px;">User</th>
@@ -83,6 +152,7 @@
                         </c:forEach>
                     </tbody>
                 </table>
+                </div>
 
                 <%-- POSTS --%>
                     <h3 style="color:#46331F; border-bottom:2px solid #CE9C6A; padding-bottom:6px; margin-top:36px;">
@@ -90,25 +160,111 @@
                     </h3>
 
                     <c:forEach var="post" items="${posts}">
-                        <div class="w3-card w3-white w3-round-large w3-margin-bottom"
-                            style="padding:14px 18px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
-                            <div style="flex:1;">
-                                <span style="font-weight:700; color:#46331F;">@${post.uname}</span>
-                                <span
-                                    style="color:#CE9C6A; font-size:11px; margin-left:8px;">${post.postDateTime}</span>
-                                <span
-                                    style="background:#CE9C6A;color:white;padding:1px 7px;border-radius:6px;font-size:11px;margin-left:6px;">${post.type}</span>
-                                <p style="color:#46331F; margin:6px 0 0; font-size:13px;">${post.content}</p>
+                        <div class="w3-card w3-white w3-round-large w3-margin-bottom" style="overflow:hidden;">
+                            <div style="height:4px; background:linear-gradient(90deg, #E46B39, #F4A83F, #CE9C6A);">
                             </div>
-                            <form class="admin-form" method="post" action="AdminPanel" style="flex-shrink:0;">
-                                <input type="hidden" name="action" value="deletePost">
-                                <input type="hidden" name="id" value="${post.id}">
-                                <button type="submit" class="w3-button w3-small w3-round"
-                                    onclick="return confirm('Delete this post permanently?');"
-                                    style="background:#d9534f;color:white;font-size:12px;padding:4px 10px;">
-                                    <i class="fa fa-trash"></i> Remove
-                                </button>
-                            </form>
+                            <div style="padding:16px 18px;">
+
+                                <%-- Author + meta --%>
+                                    <div
+                                        style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                        <div>
+                                            <span style="font-weight:700;color:#46331F;">@${post.uname}</span>
+                                            <span
+                                                style="color:#CE9C6A;font-size:11px;margin-left:8px;">${post.postDateTime}</span>
+                                            <c:if test="${post.type == 'recipe'}">
+                                                <span
+                                                    style="background:#E46B39;color:white;padding:1px 7px;border-radius:6px;font-size:11px;margin-left:6px;">Recipe</span>
+                                            </c:if>
+                                            <c:if test="${post.type == 'review'}">
+                                                <span
+                                                    style="background:#3D7A5A;color:white;padding:1px 7px;border-radius:6px;font-size:11px;margin-left:6px;">Review</span>
+                                            </c:if>
+                                        </div>
+                                        <form class="admin-form" method="post" action="AdminPanel">
+                                            <input type="hidden" name="action" value="deletePost">
+                                            <input type="hidden" name="id" value="${post.id}">
+                                            <button type="submit" class="w3-button w3-small w3-round"
+                                                onclick="return confirm('Delete this post permanently?');"
+                                                style="background:#d9534f;color:white;font-size:12px;padding:4px 10px;">
+                                                <i class="fa fa-trash"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <%-- Recipe fields --%>
+                                        <c:if test="${post.type == 'recipe'}">
+                                            <c:if test="${not empty post.title}">
+                                                <h4 style="margin:0 0 6px;color:#46331F;">${post.title}</h4>
+                                            </c:if>
+                                            <div
+                                                style="display:flex;gap:16px;font-size:12px;color:#CE9C6A;font-weight:600;margin-bottom:8px;">
+                                                <c:if test="${post.servings != null}"><span><i class="fa fa-users"></i>
+                                                        ${post.servings} servings</span></c:if>
+                                                <c:if test="${post.cookingTime != null}"><span><i
+                                                            class="fa fa-clock-o"></i> ${post.cookingTime} min</span>
+                                                </c:if>
+                                            </div>
+                                            <c:if test="${not empty post.ingredients}">
+                                                <div
+                                                    style="background:#FFF6ED;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:13px;">
+                                                    <strong>Ingredients:</strong> ${post.ingredients}
+                                                </div>
+                                            </c:if>
+                                            <c:if test="${not empty post.instructions}">
+                                                <div
+                                                    style="background:#FFF6ED;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:13px;">
+                                                    <strong>Instructions:</strong> ${post.instructions}
+                                                </div>
+                                            </c:if>
+                                        </c:if>
+
+                                        <%-- Review fields --%>
+                                            <c:if test="${post.type == 'review'}">
+                                                <c:if test="${not empty post.reviewTitle}">
+                                                    <h4 style="margin:0 0 6px;color:#46331F;">${post.reviewTitle}</h4>
+                                                </c:if>
+                                                <div
+                                                    style="display:flex;gap:16px;font-size:12px;color:#CE9C6A;font-weight:600;margin-bottom:8px;">
+                                                    <c:if test="${not empty post.reviewName}"><span><i
+                                                                class="fa fa-cutlery"></i> ${post.reviewName}</span>
+                                                    </c:if>
+                                                    <c:if test="${not empty post.location}"><span><i
+                                                                class="fa fa-map-marker"></i> ${post.location}</span>
+                                                    </c:if>
+                                                </div>
+                                                <c:if test="${post.rating != null}">
+                                                    <div style="margin-bottom:8px;">
+                                                        <c:forEach begin="1" end="5" var="star">
+                                                            <c:choose>
+                                                                <c:when test="${star le post.rating}">
+                                                                    <i class="fa fa-star" style="color:#F4A83F;"></i>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <i class="fa fa-star-o" style="color:#CE9C6A;"></i>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
+                                                        <span
+                                                            style="color:#CE9C6A;font-size:12px;margin-left:4px;">${post.rating}</span>
+                                                    </div>
+                                                </c:if>
+                                            </c:if>
+
+                                            <%-- Text body --%>
+                                                <c:if test="${not empty post.content}">
+                                                    <p style="color:#46331F;font-size:13px;margin:6px 0 0;">
+                                                        ${post.content}</p>
+                                                </c:if>
+
+                                                <%-- Image --%>
+                                                    <c:if test="${not empty post.image}">
+                                                        <img src="${post.image}"
+                                                            style="width:100%;border-radius:8px;margin-top:10px;"
+                                                            alt="Post image">
+                                                    </c:if>
+
+                            </div>
                         </div>
                     </c:forEach>
 
