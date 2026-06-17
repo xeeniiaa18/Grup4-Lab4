@@ -1,11 +1,17 @@
 package epaw.lab4.service;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import epaw.lab4.model.Post;
 import epaw.lab4.model.Notification;
 import epaw.lab4.repository.PostRepository;
+import jakarta.servlet.http.Part;
 
 public class PostService {
 
@@ -112,4 +118,29 @@ public class PostService {
         if (text.length() <= length) return text;
         return text.substring(0, length) + "...";
     }
+    
+public String savePostImage(Part filePart) {
+    if (filePart == null || filePart.getSize() <= 0) {
+        return null;
+    }
+    try {
+        String fileName = filePart.getSubmittedFileName();
+        if (fileName == null || fileName.trim().isEmpty() || !fileName.contains(".")) {
+            return null;
+        }
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        String newFileName = "post_" + UUID.randomUUID() + extension;
+
+        String resourcesDir = "EXTERNAL_RESOURCES";
+        Files.createDirectories(Paths.get(resourcesDir));
+
+        try (InputStream input = filePart.getInputStream()) {
+            Files.copy(input, Paths.get(resourcesDir, newFileName), StandardCopyOption.REPLACE_EXISTING);
+        }
+        return newFileName;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+}
 }

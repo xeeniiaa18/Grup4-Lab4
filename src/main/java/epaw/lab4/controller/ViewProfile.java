@@ -43,7 +43,7 @@ public class ViewProfile extends HttpServlet {
             request.setAttribute("profileUser", profileUser);
             request.setAttribute("posts", posts);
             request.setAttribute("user", currentUser);
-            request.getRequestDispatcher("ViewProfile.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/ViewProfile.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

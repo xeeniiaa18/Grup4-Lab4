@@ -22,7 +22,7 @@ public class Logout extends HttpServlet {
 			session.invalidate();
 		}
 
-		request.getRequestDispatcher("Logout.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/Logout.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

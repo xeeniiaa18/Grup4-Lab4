@@ -24,9 +24,9 @@ public class Menu extends HttpServlet {
 
         request.setAttribute("user", user);
 
-        String view = "MenuNotLogged.jsp";
+        String view = "/WEB-INF/MenuNotLogged.jsp";
         if (user != null) {
-            view = "MenuLogged.jsp";
+            view = "/WEB-INF/MenuLogged.jsp";
         }
 
         request.getRequestDispatcher(view).forward(request, response);

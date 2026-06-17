@@ -39,6 +39,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     user.setBio(request.getParameter("bio"));
     user.setPhone(request.getParameter("phone"));
+    user.setGender(request.getParameter("gender"));
     user.setAllergies(request.getParameter("allergies"));
     user.setTitle(request.getParameter("title"));
    String[] prefs = request.getParameterValues("foodPreferences");

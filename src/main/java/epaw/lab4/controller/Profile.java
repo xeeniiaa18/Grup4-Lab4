@@ -23,7 +23,7 @@ public class Profile extends HttpServlet {
 
         if ("edit".equals(mode)) {
             // Mostra el formulari d'edició
-            request.getRequestDispatcher("Profile.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/Profile.jsp").forward(request, response);
         } else {
             // Fetch verification request
             if (user != null) {
@@ -32,7 +32,7 @@ public class Profile extends HttpServlet {
             // Mostra la vista de lectura (per defecte)
             request.setAttribute("profileUser", user);
             request.setAttribute("isSelf", true);
-            request.getRequestDispatcher("ViewProfile.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/ViewProfile.jsp").forward(request, response);
         }
     }
 

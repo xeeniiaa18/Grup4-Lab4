@@ -24,15 +24,15 @@
 
                 <c:choose>
                     <c:when test="${not empty user}">
-                        <p style="color:#CE9C6A; font-size:15px; font-weight:600; margin:8px 0 4px;">
-                            Hello, <strong style="color:#E46B39;">${user.firstName} ${user.lastName}</strong>
+                        <p style="color:#7A5533; font-size:15px; font-weight:600; margin:8px 0 4px;">
+                            Hello, <strong style="color:#E46B39;"><c:out value="${user.firstName}"/> <c:out value="${user.lastName}"/></strong>
                         </p>
-                        <p style="color:#CE9C6A; font-size:13px; margin:0 0 20px;">
-                            @${user.username} — you can now share recipes, write reviews, and connect with foodies.
+                        <p style="color:#7A5533; font-size:13px; margin:0 0 20px;">
+                            @<c:out value="${user.username}"/> — you can now share recipes, write reviews, and connect with foodies.
                         </p>
                     </c:when>
                     <c:otherwise>
-                        <p style="color:#CE9C6A; font-size:14px; font-weight:600; margin:8px 0 20px;">
+                        <p style="color:#7A5533; font-size:14px; font-weight:600; margin:8px 0 20px;">
                             Discover recipes, share reviews, and connect with food lovers around the world.
                         </p>
                     </c:otherwise>
@@ -44,7 +44,7 @@
                     Explore the Feed
                 </button>
 
-                <p style="color:#CE9C6A; font-size:11px; margin-top:12px;">Redirecting automatically in a few seconds...
+                <p style="color:#7A5533; font-size:11px; margin-top:12px;">Redirecting automatically in a few seconds...
                 </p>
             </div>
         </div>

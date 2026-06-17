@@ -13,10 +13,10 @@
 
         <c:choose>
             <c:when test="${empty notifications}">
-                <div style="text-align: center; padding: 40px 20px; color: #CE9C6A;">
+                <div style="text-align: center; padding: 40px 20px; color:#7A5533;">
                     <i class="fa fa-inbox" style="font-size:48px; margin-bottom:12px; display:block;"></i>
                     <p style="margin: 0; font-size: 15px; font-weight: 600;">You are all caught up!</p>
-                    <p style="margin: 4px 0 0; font-size: 13px; color: #CE9C6A;">When other foodies interact with your posts or follow you, it will show up here.</p>
+                    <p style="margin: 4px 0 0; font-size: 13px; color:#7A5533;">When other foodies interact with your posts or follow you, it will show up here.</p>
                 </div>
             </c:when>
             <c:otherwise>
@@ -30,16 +30,16 @@
                                     <c:when test="${n.type == 'comment'}"><i class="fa fa-comment" style="color:#46331F;"></i></c:when>
                                     <c:when test="${n.type == 'follow'}"><i class="fa fa-user-plus" style="color:#3D7A5A;"></i></c:when>
                                     <c:when test="${n.type == 'save'}"><i class="fa fa-bookmark" style="color:#F4A83F;"></i></c:when>
-                                    <c:otherwise><i class="fa fa-bell" style="color:#CE9C6A;"></i></c:otherwise>
+                                    <c:otherwise><i class="fa fa-bell" style="color:#7A5533;"></i></c:otherwise>
                                 </c:choose>
                             </div>
                             
                             <div style="flex: 1; min-width: 0;">
                                 <p style="margin: 0; color: #46331F; font-size: 14px; font-weight: ${n.read ? 'normal' : '700'}; line-height: 1.4;">
-                                    ${n.message}
+                                    <c:out value="${n.message}"/>
                                 </p>
-                                <span style="font-size: 11px; color: #CE9C6A; display: block; margin-top: 4px;">
-                                    ${n.createdAt}
+                                <span style="font-size: 11px; color:#7A5533; display: block; margin-top: 4px;">
+                                    <c:out value="${n.createdAt}"/>
                                 </span>
                             </div>
                             

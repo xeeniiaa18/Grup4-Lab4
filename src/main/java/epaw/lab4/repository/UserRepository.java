@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.mindrot.jbcrypt.BCrypt;
 import epaw.lab4.model.User;
 
 public class UserRepository extends BaseRepository {
@@ -39,12 +40,23 @@ public class UserRepository extends BaseRepository {
     }
 
     public boolean checkLogin(User user) {
-        String query = "SELECT id, picture, email, phone, firstName, lastName, dateOfBirth, gender, title, allergies, foodPreferences, bio, role, verified, banned FROM users WHERE username = ? AND password = ?";
+        // Fetch hash by username only; verify with BCrypt to avoid timing attacks
+        String query = "SELECT id, password, picture, email, phone, firstName, lastName, dateOfBirth, gender, title, allergies, foodPreferences, bio, role, verified, banned FROM users WHERE username = ?";
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
             try (ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
+                    String storedHash = rs.getString("password");
+                    if (user.getPassword() == null || storedHash == null || !storedHash.startsWith("$2")) {
+                        return false;
+                    }
+                    try {
+                        if (!BCrypt.checkpw(user.getPassword(), storedHash)) {
+                            return false;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        return false;
+                    }
                     user.setId(rs.getInt("id"));
                     user.setPicture(rs.getString("picture"));
                     user.setEmail(rs.getString("email"));
@@ -73,7 +85,9 @@ public class UserRepository extends BaseRepository {
         String query = "INSERT INTO users (username, password, picture, email, phone, firstName, lastName, dateOfBirth, gender, title, allergies, foodPreferences, bio, role, verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = db.prepareStatement(query)) {
             statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
+            // Hash password with BCrypt before storing
+            String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+            statement.setString(2, hashedPassword);
             statement.setString(3, user.getPicture());
             statement.setString(4, user.getEmail());
             statement.setString(5, user.getPhone());

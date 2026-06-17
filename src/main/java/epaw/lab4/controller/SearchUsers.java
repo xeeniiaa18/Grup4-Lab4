@@ -54,6 +54,25 @@ public class SearchUsers extends HttpServlet {
 
     private String escape(String str) {
         if (str == null) return "";
-        return str.replace("\"", "\\\"");
+        StringBuilder escaped = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            switch (ch) {
+                case '\\': escaped.append("\\\\"); break;
+                case '"': escaped.append("\\\""); break;
+                case '\b': escaped.append("\\b"); break;
+                case '\f': escaped.append("\\f"); break;
+                case '\n': escaped.append("\\n"); break;
+                case '\r': escaped.append("\\r"); break;
+                case '\t': escaped.append("\\t"); break;
+                default:
+                    if (ch < 0x20) {
+                        escaped.append(String.format("\\u%04x", (int) ch));
+                    } else {
+                        escaped.append(ch);
+                    }
+            }
+        }
+        return escaped.toString();
     }
 }

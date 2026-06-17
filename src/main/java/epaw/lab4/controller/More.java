@@ -28,6 +28,6 @@ public class More extends HttpServlet {
             new MoreItem("fa fa-info-circle",    "About",            "Learn more about Forkful")
         );
         request.setAttribute("moreItems", items);
-        request.getRequestDispatcher("More.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/More.jsp").forward(request, response);
     }
 }

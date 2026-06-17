@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+    <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
         <div class="sidebar-menu"
             style="display: flex; flex-direction: column; justify-content: space-between; height: calc(100vh - 100px); padding: 10px 0;">
@@ -83,7 +84,7 @@
                 style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background-color:#FFF6ED;transition:all 0.2s;">
                 <c:choose>
                     <c:when test="${not empty sessionScope.user.picture}">
-                        <img src="${sessionScope.user.picture}" class="w3-circle"
+                        <img src="${fn:escapeXml(sessionScope.user.picture)}" class="w3-circle"
                             style="height:40px;width:40px;object-fit:cover;border:2px solid #E46B39;" alt="Avatar">
                     </c:when>
                     <c:otherwise>
@@ -96,11 +97,11 @@
                 <div style="display:flex;flex-direction:column;overflow:hidden;">
                     <span
                         style="font-weight:700;color:#46331F;font-size:13px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">
-                        ${sessionScope.user.firstName} ${sessionScope.user.lastName}
+                        <c:out value="${sessionScope.user.firstName}"/> <c:out value="${sessionScope.user.lastName}"/>
                     </span>
                     <span
-                        style="color:#CE9C6A;font-size:11px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">
-                        @${sessionScope.user.username}
+                        style="color:#7A5533;font-size:11px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">
+                        @<c:out value="${sessionScope.user.username}"/>
                     </span>
                 </div>
             </a>

@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+    <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
         <c:choose>
             <c:when test="${empty profileUser}">
-                <p style="color:#CE9C6A;text-align:center;padding:40px;">User not found.</p>
+                <p style="color:#7A5533;text-align:center;padding:40px;">User not found.</p>
             </c:when>
             <c:otherwise>
                 <div style="max-width:600px; margin:0 auto; padding:24px 0;">
@@ -14,7 +15,7 @@
                         <div style="display:flex;align-items:center;gap:18px;margin-bottom:20px;">
                             <c:choose>
                                 <c:when test="${not empty profileUser.picture}">
-                                    <img src="${profileUser.picture}" class="w3-circle"
+                                    <img src="${fn:escapeXml(profileUser.picture)}" class="w3-circle"
                                         style="height:80px;width:80px;object-fit:cover;border:3px solid #E46B39;"
                                         alt="Avatar">
                                 </c:when>
@@ -27,15 +28,15 @@
                             </c:choose>
                             <div>
                                 <div style="font-family:'Pacifico',cursive;font-size:20px;color:#46331F;">
-                                    <c:if test="${not empty profileUser.title}">${profileUser.title} </c:if>
-                                    ${profileUser.firstName} ${profileUser.lastName}
+                                    <c:if test="${not empty profileUser.title}"><c:out value="${profileUser.title}"/> </c:if>
+                                    <c:out value="${profileUser.firstName}"/> <c:out value="${profileUser.lastName}"/>
                                     <c:if test="${profileUser.verified}">
                                         <i class="fa fa-check-circle" style="color:#3D7A5A;font-size:14px;"></i>
                                     </c:if>
                                 </div>
-                                <div style="color:#CE9C6A;font-size:13px;">@${profileUser.username}</div>
+                                <div style="color:#7A5533;font-size:13px;">@<c:out value="${profileUser.username}"/></div>
                                 <c:if test="${not empty profileUser.bio}">
-                                    <div style="color:#46331F;font-size:13px;margin-top:6px;">${profileUser.bio}</div>
+                                    <div style="color:#46331F;font-size:13px;margin-top:6px;"><c:out value="${profileUser.bio}"/></div>
                                 </c:if>
                             </div>
                         </div>
@@ -46,7 +47,7 @@
                             <c:if test="${not empty profileUser.phone}">
                                 <div>
                                     <span style="font-weight:700;"><i class="fa fa-phone"></i> Phone: </span>
-                                    ${profileUser.phone}
+                                    <c:out value="${profileUser.phone}"/>
                                 </div>
                             </c:if>
 
@@ -54,14 +55,14 @@
                                 <div>
                                     <span style="font-weight:700;"><i class="fa fa-birthday-cake"></i> Date of birth:
                                     </span>
-                                    ${profileUser.dateOfBirth}
+                                    <c:out value="${profileUser.dateOfBirth}"/>
                                 </div>
                             </c:if>
 
                             <c:if test="${not empty profileUser.gender}">
                                 <div>
                                     <span style="font-weight:700;"><i class="fa fa-venus-mars"></i> Gender: </span>
-                                    ${profileUser.gender}
+                                    <c:out value="${profileUser.gender}"/>
                                 </div>
                             </c:if>
 
@@ -69,7 +70,7 @@
                                 <div>
                                     <span style="font-weight:700;"><i class="fa fa-exclamation-triangle"></i> Allergies:
                                     </span>
-                                    ${profileUser.allergies}
+                                    <c:out value="${profileUser.allergies}"/>
                                 </div>
                             </c:if>
 
@@ -81,7 +82,7 @@
                                         <c:forTokens var="pref" items="${profileUser.foodPreferences}" delims=",">
                                             <span
                                                 style="background:#FFF6ED;border:1px solid #E46B39;color:#E46B39;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:600;">
-                                                ${pref}
+                                                <c:out value="${pref}"/>
                                             </span>
                                         </c:forTokens>
                                     </div>

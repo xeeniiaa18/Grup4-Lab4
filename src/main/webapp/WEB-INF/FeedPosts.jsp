@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
         <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+        <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
             <c:choose>
                 <c:when test="${empty posts}">
                     <div class="w3-white w3-round w3-card w3-section" style="overflow:hidden;">
                         <div style="height:5px; background:linear-gradient(90deg, #E46B39, #F4A83F, #CE9C6A);"></div>
-                        <div style="padding: 40px 20px; text-align: center; color: #CE9C6A;">
+                        <div style="padding: 40px 20px; text-align: center; color:#7A5533;">
                             <i class="fa fa-cutlery" style="font-size:48px; margin-bottom:12px; display:block;"></i>
                             <p style="margin: 0; font-size: 15px; font-weight: 600;">No posts to show yet.</p>
                             <p style="margin: 4px 0 0; font-size: 13px;">Be the first to share a recipe or review!</p>
@@ -26,7 +27,7 @@
                                         <div style="display:flex; align-items:center; gap:10px;">
                                             <c:choose>
                                                 <c:when test="${not empty post.upicture}">
-                                                    <img src="${post.upicture}" class="w3-circle"
+                                                    <img src="${fn:escapeXml(post.upicture)}" class="w3-circle"
                                                         style="width:42px;height:42px;object-fit:cover;border:2px solid #E46B39;"
                                                         alt="Avatar">
                                                 </c:when>
@@ -40,13 +41,13 @@
                                             <div>
                                                 <a class="menu" href="ViewProfile?uid=${post.uid}"
                                                     style="font-weight:700;color:#46331F;font-size:14px;text-decoration:none;">
-                                                    ${post.ufirstName} ${post.ulastName}
+                                                    <c:out value="${post.ufirstName}"/> <c:out value="${post.ulastName}"/>
                                                 </a>
                                                 <span
-                                                    style="color:#CE9C6A;font-size:12px;margin-left:4px;">@${post.uname}</span>
+                                                    style="color:#7A5533;font-size:12px;margin-left:4px;">@<c:out value="${post.uname}"/></span>
                                             </div>
                                         </div>
-                                        <span style="color:#CE9C6A;font-size:11px;">${post.postDateTime}</span>
+                                        <span style="color:#7A5533;font-size:11px;"><c:out value="${post.postDateTime}"/></span>
                                     </div>
 
                                     <%-- Type badge --%>
@@ -67,16 +68,16 @@
                                             <c:if test="${post.type == 'recipe'}">
                                                 <c:if test="${not empty post.title}">
                                                     <h3 style="margin:8px 0 6px;color:#46331F;font-size:17px;">
-                                                        ${post.title}</h3>
+                                                        <c:out value="${post.title}"/></h3>
                                                 </c:if>
                                                 <div
-                                                    style="display:flex;gap:16px;margin-bottom:10px;font-size:12px;color:#CE9C6A;font-weight:600;">
+                                                style="display:flex;gap:16px;margin-bottom:10px;font-size:12px;color:#7A5533;font-weight:600;">
                                                     <c:if test="${post.servings != null}">
-                                                        <span><i class="fa fa-users"></i> ${post.servings}
+                                                        <span><i class="fa fa-users"></i> <c:out value="${post.servings}"/>
                                                             servings</span>
                                                     </c:if>
                                                     <c:if test="${post.cookingTime != null}">
-                                                        <span><i class="fa fa-clock-o"></i> ${post.cookingTime}
+                                                        <span><i class="fa fa-clock-o"></i> <c:out value="${post.cookingTime}"/>
                                                             min</span>
                                                     </c:if>
                                                 </div>
@@ -88,7 +89,7 @@
                                                             <i class="fa fa-list-ul"></i> Ingredients
                                                         </span>
                                                         <span
-                                                            style="color:#46331F;font-size:13px;white-space:pre-line;">${post.ingredients}</span>
+                                                            style="color:#46331F;font-size:13px;white-space:pre-line;"><c:out value="${post.ingredients}"/></span>
                                                     </div>
                                                 </c:if>
                                                 <c:if test="${not empty post.instructions}">
@@ -99,7 +100,7 @@
                                                             <i class="fa fa-tasks"></i> Instructions
                                                         </span>
                                                         <span
-                                                            style="color:#46331F;font-size:13px;white-space:pre-line;">${post.instructions}</span>
+                                                            style="color:#46331F;font-size:13px;white-space:pre-line;"><c:out value="${post.instructions}"/></span>
                                                     </div>
                                                 </c:if>
                                             </c:if>
@@ -108,17 +109,17 @@
                                                 <c:if test="${post.type == 'review'}">
                                                     <c:if test="${not empty post.reviewTitle}">
                                                         <h3 style="margin:8px 0 6px;color:#46331F;font-size:17px;">
-                                                            ${post.reviewTitle}</h3>
+                                                            <c:out value="${post.reviewTitle}"/></h3>
                                                     </c:if>
                                                     <div
-                                                        style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:#CE9C6A;font-weight:600;">
+                                                        style="display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:#7A5533;font-weight:600;">
                                                         <c:if test="${not empty post.reviewName}">
                                                             <span><i class="fa fa-cutlery"></i>
-                                                                ${post.reviewName}</span>
+                                                                <c:out value="${post.reviewName}"/></span>
                                                         </c:if>
                                                         <c:if test="${not empty post.location}">
                                                             <span><i class="fa fa-map-marker"></i>
-                                                                ${post.location}</span>
+                                                                <c:out value="${post.location}"/></span>
                                                         </c:if>
                                                     </div>
                                                     <c:if test="${post.rating != null}">
@@ -136,12 +137,12 @@
                                                                     </c:when>
                                                                     <c:otherwise>
                                                                         <i class="fa fa-star-o"
-                                                                            style="color:#CE9C6A;font-size:16px;"></i>
+                                                                            style="color:#7A5533;font-size:16px;"></i>
                                                                     </c:otherwise>
                                                                 </c:choose>
                                                             </c:forEach>
                                                             <span
-                                                                style="color:#CE9C6A;font-size:12px;font-weight:600;margin-left:4px;">${post.rating}</span>
+                                                                style="color:#7A5533;font-size:12px;font-weight:600;margin-left:4px;"><c:out value="${post.rating}"/></span>
                                                         </div>
                                                     </c:if>
                                                 </c:if>
@@ -150,11 +151,11 @@
                                                     <c:if test="${not empty post.content}">
                                                         <p
                                                             style="color:#46331F;font-size:14px;line-height:1.5;margin:8px 0 12px;">
-                                                            ${post.content}</p>
+                                                            <c:out value="${post.content}"/></p>
                                                     </c:if>
 
                                                     <c:if test="${not empty post.image}">
-                                                        <img src="${post.image}"
+                                                        <img src="${fn:escapeXml(post.image)}"
                                                             style="width:100%;border-radius:10px;margin-bottom:10px;"
                                                             alt="Post image">
                                                     </c:if>
@@ -168,31 +169,34 @@
                                                                         <c:choose>
                                                                             <c:when test="${post.likedByCurrentUser}">
                                                                                 <button type="button" class="unlikePost"
+                                                                                    aria-label="Unlike this post"
                                                                                     style="background:none;border:none;color:#E46B39;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
                                                                                     onmouseover="this.style.backgroundColor='#FFF6ED';"
                                                                                     onmouseout="this.style.backgroundColor='transparent';">
                                                                                     <i class="fa fa-heart"></i>
-                                                                                    ${post.likesCount}
+                                                                                    <c:out value="${post.likesCount}"/>
                                                                                 </button>
                                                                             </c:when>
                                                                             <c:otherwise>
                                                                                 <button type="button" class="likePost"
-                                                                                    style="background:none;border:none;color:#CE9C6A;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
+                                                                                    aria-label="Like this post"
+                                                                                    style="background:none;border:none;color:#7A5533;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
                                                                                     onmouseover="this.style.backgroundColor='#FFF6ED';"
                                                                                     onmouseout="this.style.backgroundColor='transparent';">
                                                                                     <i class="fa fa-heart-o"></i>
-                                                                                    ${post.likesCount}
+                                                                                    <c:out value="${post.likesCount}"/>
                                                                                 </button>
                                                                             </c:otherwise>
                                                                         </c:choose>
 
                                                                         <%-- Comment toggle --%>
                                                                             <button type="button" class="toggleComments"
-                                                                                style="background:none;border:none;color:#CE9C6A;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
+                                                                                aria-label="Toggle comments"
+                                                                                style="background:none;border:none;color:#7A5533;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
                                                                                 onmouseover="this.style.backgroundColor='#FFF6ED';"
                                                                                 onmouseout="this.style.backgroundColor='transparent';">
                                                                                 <i class="fa fa-comment-o"></i>
-                                                                                ${post.commentsCount}
+                                                                                <c:out value="${post.commentsCount}"/>
                                                                             </button>
 
                                                                             <%-- Save / Unsave --%>
@@ -201,6 +205,7 @@
                                                                                         test="${post.savedByCurrentUser}">
                                                                                         <button type="button"
                                                                                             class="unsavePost"
+                                                                                            aria-label="Unsave post"
                                                                                             style="background:none;border:none;color:#3D7A5A;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
                                                                                             onmouseover="this.style.backgroundColor='#FFF6ED';"
                                                                                             onmouseout="this.style.backgroundColor='transparent';">
@@ -212,7 +217,8 @@
                                                                                     <c:otherwise>
                                                                                         <button type="button"
                                                                                             class="savePost"
-                                                                                            style="background:none;border:none;color:#CE9C6A;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
+                                                                                            aria-label="Save post"
+                                                                                            style="background:none;border:none;color:#7A5533;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
                                                                                             onmouseover="this.style.backgroundColor='#FFF6ED';"
                                                                                             onmouseout="this.style.backgroundColor='transparent';">
                                                                                             <i
@@ -227,6 +233,7 @@
                                                                                         test="${post.uid == user.id or user.role == 'admin'}">
                                                                                         <button type="button"
                                                                                             class="delPost"
+                                                                                            aria-label="Delete post"
                                                                                             style="background:none;border:none;color:#d9534f;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;margin-left:auto;"
                                                                                             onmouseover="this.style.backgroundColor='#fce4e4';"
                                                                                             onmouseout="this.style.backgroundColor='transparent';">
@@ -236,11 +243,11 @@
                                                                                     </c:if>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <span style="color:#CE9C6A;font-size:12px;">
-                                                                        <i class="fa fa-heart-o"></i> ${post.likesCount}
+                                                                    <span style="color:#7A5533;font-size:12px;">
+                                                                        <i class="fa fa-heart-o"></i> <c:out value="${post.likesCount}"/>
                                                                         likes &nbsp;
                                                                         <i class="fa fa-comment-o"></i>
-                                                                        ${post.commentsCount} comments
+                                                                        <c:out value="${post.commentsCount}"/> comments
                                                                     </span>
                                                                 </c:otherwise>
                                                             </c:choose>
@@ -256,7 +263,7 @@
                                                                         style="display:flex;gap:8px;align-items:center;">
                                                                         <c:choose>
                                                                             <c:when test="${not empty user.picture}">
-                                                                                <img src="${user.picture}"
+                                                                                <img src="${fn:escapeXml(user.picture)}"
                                                                                     class="w3-circle"
                                                                                     style="width:28px;height:28px;object-fit:cover;flex-shrink:0;border:1.5px solid #CE9C6A;"
                                                                                     alt="">
@@ -265,7 +272,7 @@
                                                                                 <div
                                                                                     style="width:28px;height:28px;border-radius:50%;background:#FFF6ED;border:1.5px solid #CE9C6A;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                                                                                     <i class="fa fa-user"
-                                                                                        style="color:#CE9C6A;font-size:12px;"></i>
+                                                                                        style="color:#7A5533;font-size:12px;"></i>
                                                                                 </div>
                                                                             </c:otherwise>
                                                                         </c:choose>

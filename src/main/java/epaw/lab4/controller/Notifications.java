@@ -32,7 +32,7 @@ public class Notifications extends HttpServlet {
         postService.markNotificationsAsRead(user.getId());
 
         request.setAttribute("notifications", notifications);
-        request.getRequestDispatcher("Notifications.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/Notifications.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

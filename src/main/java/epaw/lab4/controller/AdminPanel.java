@@ -39,7 +39,7 @@ public class AdminPanel extends HttpServlet {
         request.setAttribute("users", UserService.getInstance().getAllUsers());
         request.setAttribute("posts", PostService.instance().getAllPosts(admin.getId(), 0, 50));
         request.setAttribute("verificationRequests", VerificationRequestRepository.getInstance().findAllPending());
-        request.getRequestDispatcher("AdminPanel.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/AdminPanel.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -67,6 +67,6 @@ public class AdminPanel extends HttpServlet {
     request.setAttribute("users", UserService.getInstance().getAllUsers());
     request.setAttribute("posts", PostService.instance().getAllPosts(admin.getId(), 0, 50));
     request.setAttribute("verificationRequests", VerificationRequestRepository.getInstance().findAllPending());
-    request.getRequestDispatcher("AdminPanel.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/AdminPanel.jsp").forward(request, response);
 }
 }

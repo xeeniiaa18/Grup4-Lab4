@@ -41,7 +41,7 @@ public class NotFollowed extends HttpServlet {
 
     request.setAttribute("users", users);
     request.setAttribute("currentUser", user);
-    request.getRequestDispatcher("NotFollowed.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/NotFollowed.jsp").forward(request, response);
 }
 
 private int countMatches(String prefs, String[] myPrefs) {

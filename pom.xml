@@ -46,6 +46,13 @@
             <version>1.16.1</version>
         </dependency>
 
+        <!-- jBCrypt — hash segur de contrasenyes -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -29,7 +29,7 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher("Login.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
 
 	}
 
@@ -48,12 +48,12 @@ public class Login extends HttpServlet {
 		if (errors.isEmpty()) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", user);
-			request.getRequestDispatcher("Timeline.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/Timeline.jsp").forward(request, response);
 		} else {
 			user.setPassword("");
 			request.setAttribute("user", user);
 			request.setAttribute("errors", errors);
-			request.getRequestDispatcher("Login.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/Login.jsp").forward(request, response);
 		}
 	}
 }

@@ -45,7 +45,7 @@ public class Followers extends HttpServlet {
 
         request.setAttribute("users", followers);
         request.setAttribute("followingIds", followingIds);
-        request.getRequestDispatcher("Followers.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/Followers.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+    <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
         <div style="padding:20px; background:#FFF6ED; min-height:80vh; box-sizing:border-box; max-width:100%;">
 
             <h2 style="font-family:'Pacifico',cursive; color:#46331F; margin-bottom:4px;">
                 <i class="fa fa-shield"></i> Admin Panel
             </h2>
-            <p style="color:#CE9C6A; margin-top:0; font-size:13px;">
-                Logged in as <strong>@${sessionScope.user.username}</strong>
+            <p style="color:#7A5533; margin-top:0; font-size:13px;">
+                Logged in as <strong>@<c:out value="${sessionScope.user.username}"/></strong>
             </p>
 
             <%-- VERIFICATION REQUESTS --%>
@@ -33,7 +34,7 @@
                                 <td style="padding:10px; display:flex; align-items:center; gap:10px;">
                                     <c:choose>
                                         <c:when test="${not empty req.picture}">
-                                            <img src="${req.picture}" class="w3-circle" style="width:36px;height:36px;object-fit:cover;">
+                                            <img src="${fn:escapeXml(req.picture)}" class="w3-circle" style="width:36px;height:36px;object-fit:cover;">
                                         </c:when>
                                         <c:otherwise>
                                             <div style="width:36px;height:36px;border-radius:50%;background:#CE9C6A;display:flex;align-items:center;justify-content:center;">
@@ -42,17 +43,17 @@
                                         </c:otherwise>
                                     </c:choose>
                                     <div>
-                                        <strong style="color:#46331F;">${req.firstName} ${req.lastName}</strong><br>
-                                        <span style="color:#CE9C6A; font-size:12px;">@${req.username}</span>
+                                        <strong style="color:#46331F;"><c:out value="${req.firstName}"/> <c:out value="${req.lastName}"/></strong><br>
+                                        <span style="color:#7A5533; font-size:12px;">@<c:out value="${req.username}"/></span>
                                     </div>
                                 </td>
                                 <td style="color:#46331F; font-size:13px; max-width:300px;">
                                     <c:choose>
-                                        <c:when test="${empty req.message}"><em style="color:#CE9C6A">No message provided</em></c:when>
-                                        <c:otherwise>${req.message}</c:otherwise>
+                                        <c:when test="${empty req.message}"><em style="color:#7A5533">No message provided</em></c:when>
+                                        <c:otherwise><c:out value="${req.message}"/></c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td style="color:#CE9C6A; font-size:12px;">${req.createdAt}</td>
+                                <td style="color:#7A5533; font-size:12px;"><c:out value="${req.createdAt}"/></td>
                                 <td style="display:flex; gap:6px; padding:10px;">
                                     <form class="admin-form" method="post" action="AdminPanel" style="display:inline;">
                                         <input type="hidden" name="action" value="acceptVerification">
@@ -98,10 +99,10 @@
                             <c:if test="${u.role != 'admin'}">
                                 <tr style="border-bottom:1px solid #f0e8df;">
                                     <td style="padding:10px;">
-                                        <strong style="color:#46331F;">${u.firstName} ${u.lastName}</strong><br>
-                                        <span style="color:#CE9C6A; font-size:12px;">@${u.username}</span>
+                                        <strong style="color:#46331F;"><c:out value="${u.firstName}"/> <c:out value="${u.lastName}"/></strong><br>
+                                        <span style="color:#7A5533; font-size:12px;">@<c:out value="${u.username}"/></span>
                                     </td>
-                                    <td style="color:#46331F; font-size:13px;">${u.email}</td>
+                                    <td style="color:#46331F; font-size:13px;"><c:out value="${u.email}"/></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${u.banned}">
@@ -141,7 +142,7 @@
                                             <input type="hidden" name="action" value="deleteUser">
                                             <input type="hidden" name="id" value="${u.id}">
                                             <button type="submit" class="w3-button w3-small w3-round"
-                                                onclick="return confirm('Permanently delete @${u.username}? This cannot be undone.');"
+                                                onclick="return confirm('Permanently delete this user? This cannot be undone.');"
                                                 style="background:#d9534f;color:white;font-size:12px;padding:4px 10px;">
                                                 Delete
                                             </button>
@@ -169,9 +170,9 @@
                                     <div
                                         style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                                         <div>
-                                            <span style="font-weight:700;color:#46331F;">@${post.uname}</span>
+                                            <span style="font-weight:700;color:#46331F;">@<c:out value="${post.uname}"/></span>
                                             <span
-                                                style="color:#CE9C6A;font-size:11px;margin-left:8px;">${post.postDateTime}</span>
+                                                style="color:#7A5533;font-size:11px;margin-left:8px;"><c:out value="${post.postDateTime}"/></span>
                                             <c:if test="${post.type == 'recipe'}">
                                                 <span
                                                     style="background:#E46B39;color:white;padding:1px 7px;border-radius:6px;font-size:11px;margin-left:6px;">Recipe</span>
@@ -195,26 +196,26 @@
                                     <%-- Recipe fields --%>
                                         <c:if test="${post.type == 'recipe'}">
                                             <c:if test="${not empty post.title}">
-                                                <h4 style="margin:0 0 6px;color:#46331F;">${post.title}</h4>
+                                                <h4 style="margin:0 0 6px;color:#46331F;"><c:out value="${post.title}"/></h4>
                                             </c:if>
                                             <div
-                                                style="display:flex;gap:16px;font-size:12px;color:#CE9C6A;font-weight:600;margin-bottom:8px;">
+                                                style="display:flex;gap:16px;font-size:12px;color:#7A5533;font-weight:600;margin-bottom:8px;">
                                                 <c:if test="${post.servings != null}"><span><i class="fa fa-users"></i>
-                                                        ${post.servings} servings</span></c:if>
+                                                        <c:out value="${post.servings}"/> servings</span></c:if>
                                                 <c:if test="${post.cookingTime != null}"><span><i
-                                                            class="fa fa-clock-o"></i> ${post.cookingTime} min</span>
+                                                            class="fa fa-clock-o"></i> <c:out value="${post.cookingTime}"/> min</span>
                                                 </c:if>
                                             </div>
                                             <c:if test="${not empty post.ingredients}">
                                                 <div
                                                     style="background:#FFF6ED;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:13px;">
-                                                    <strong>Ingredients:</strong> ${post.ingredients}
+                                                    <strong>Ingredients:</strong> <c:out value="${post.ingredients}"/>
                                                 </div>
                                             </c:if>
                                             <c:if test="${not empty post.instructions}">
                                                 <div
                                                     style="background:#FFF6ED;border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:13px;">
-                                                    <strong>Instructions:</strong> ${post.instructions}
+                                                    <strong>Instructions:</strong> <c:out value="${post.instructions}"/>
                                                 </div>
                                             </c:if>
                                         </c:if>
@@ -222,15 +223,15 @@
                                         <%-- Review fields --%>
                                             <c:if test="${post.type == 'review'}">
                                                 <c:if test="${not empty post.reviewTitle}">
-                                                    <h4 style="margin:0 0 6px;color:#46331F;">${post.reviewTitle}</h4>
+                                                    <h4 style="margin:0 0 6px;color:#46331F;"><c:out value="${post.reviewTitle}"/></h4>
                                                 </c:if>
                                                 <div
-                                                    style="display:flex;gap:16px;font-size:12px;color:#CE9C6A;font-weight:600;margin-bottom:8px;">
+                                                    style="display:flex;gap:16px;font-size:12px;color:#7A5533;font-weight:600;margin-bottom:8px;">
                                                     <c:if test="${not empty post.reviewName}"><span><i
-                                                                class="fa fa-cutlery"></i> ${post.reviewName}</span>
+                                                                class="fa fa-cutlery"></i> <c:out value="${post.reviewName}"/></span>
                                                     </c:if>
                                                     <c:if test="${not empty post.location}"><span><i
-                                                                class="fa fa-map-marker"></i> ${post.location}</span>
+                                                                class="fa fa-map-marker"></i> <c:out value="${post.location}"/></span>
                                                     </c:if>
                                                 </div>
                                                 <c:if test="${post.rating != null}">
@@ -241,12 +242,12 @@
                                                                     <i class="fa fa-star" style="color:#F4A83F;"></i>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <i class="fa fa-star-o" style="color:#CE9C6A;"></i>
+                                                                    <i class="fa fa-star-o" style="color:#7A5533;"></i>
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </c:forEach>
                                                         <span
-                                                            style="color:#CE9C6A;font-size:12px;margin-left:4px;">${post.rating}</span>
+                                                            style="color:#7A5533;font-size:12px;margin-left:4px;"><c:out value="${post.rating}"/></span>
                                                     </div>
                                                 </c:if>
                                             </c:if>
@@ -254,12 +255,12 @@
                                             <%-- Text body --%>
                                                 <c:if test="${not empty post.content}">
                                                     <p style="color:#46331F;font-size:13px;margin:6px 0 0;">
-                                                        ${post.content}</p>
+                                                        <c:out value="${post.content}"/></p>
                                                 </c:if>
 
                                                 <%-- Image --%>
                                                     <c:if test="${not empty post.image}">
-                                                        <img src="${post.image}"
+                                                        <img src="${fn:escapeXml(post.image)}"
                                                             style="width:100%;border-radius:8px;margin-top:10px;"
                                                             alt="Post image">
                                                     </c:if>

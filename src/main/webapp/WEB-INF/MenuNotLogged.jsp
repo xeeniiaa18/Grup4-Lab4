@@ -39,7 +39,7 @@
         </div>
         <div style="display:flex;flex-direction:column;">
             <span style="font-weight:700;color:#46331F;font-size:13px;">Guest User</span>
-            <span style="color:#CE9C6A;font-size:11px;">Browsing mode</span>
+            <span style="color:#7A5533;font-size:11px;">Browsing mode</span>
         </div>
     </div>
 

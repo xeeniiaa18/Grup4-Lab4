@@ -69,32 +69,47 @@ public class UserService {
         if (dob == null || dob.trim().isEmpty()) {
             errors.put("dateOfBirth", "Date of birth cannot be empty.");
         }
-        
-        
 
         return errors;
     }
 
-    public Map<String, String> register(User user) {
+    /**
+     * Registers a new user after validating fields and GDPR consent.
+     *
+     * @param user         the user to register
+     * @param gdprConsent  value of the gdprConsent checkbox ("on" if checked)
+     * @return map of field → error message; empty if registration succeeded
+     */
+    public Map<String, String> register(User user, String gdprConsent) {
         Map<String, String> errors = validate(user);
+
+        // RGPD: consent is mandatory
+        if (!"on".equals(gdprConsent)) {
+            errors.put("gdprConsent", "You must accept the Privacy Policy to register.");
+        }
+
         if (errors.isEmpty()) {
             userRepository.save(user);
         }
         return errors;
     }
 
+    public Map<String, String> register(User user) {
+        return register(user, null);
+    }
+
     public Map<String, String> login(User user) {
         Map<String, String> errors = new HashMap<>();
         if (!userRepository.checkLogin(user)) {
             errors.put("password", "The combination of username and password does not match in our database.");
-        }else if (user.isBanned()) {
-        errors.put("password", "Your account has been suspended.");
+        } else if (user.isBanned()) {
+            errors.put("password", "Your account has been suspended.");
         }
         return errors;
     }
 
-    public User getUserById(Integer id){
-        Optional <User> user= userRepository.findById(id);
+    public User getUserById(Integer id) {
+        Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
     }
 
@@ -109,34 +124,35 @@ public class UserService {
             return users.get();
         return null;
     }
-    
+
     // Get followed users
     public List<User> getFollowedUsers(Integer id, Integer start, Integer end) {
-        Optional<List<User>> users = userRepository.findFollowed(id,start,end);
+        Optional<List<User>> users = userRepository.findFollowed(id, start, end);
         if (users.isPresent())
             return users.get();
         return null;
     }
+
     public List<User> getFollowers(Integer id, Integer start, Integer end) {
         Optional<List<User>> users = userRepository.findFollowers(id, start, end);
         return users.orElse(null);
     }
-        
+
     // Get unfollowed users
     public List<User> getNotFollowedUsers(Integer id, Integer start, Integer end) {
-        Optional<List<User>> users = userRepository.findNotFollowed(id,start,end);
+        Optional<List<User>> users = userRepository.findNotFollowed(id, start, end);
         if (users.isPresent())
             return users.get();
         return null;
     }
-    
+
     // Follow User
-    public void follow(Integer uid,Integer fid) {
+    public void follow(Integer uid, Integer fid) {
         userRepository.followUser(uid, fid);
     }
-    
+
     // Unfollow User
-    public void unfollow(Integer uid,Integer fid) {
+    public void unfollow(Integer uid, Integer fid) {
         userRepository.unfollowUser(uid, fid);
     }
 

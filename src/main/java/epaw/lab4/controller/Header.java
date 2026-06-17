@@ -22,7 +22,7 @@ public class Header extends HttpServlet {
             user = (User) session.getAttribute("user");
         }
         request.setAttribute("user", user);
-        request.getRequestDispatcher("Header.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/Header.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

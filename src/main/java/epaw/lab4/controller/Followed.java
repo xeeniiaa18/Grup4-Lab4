@@ -42,7 +42,7 @@ public class Followed extends HttpServlet {
 			}
 		}
 		request.setAttribute("users",users);
-		request.getRequestDispatcher("Followed.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/Followed.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

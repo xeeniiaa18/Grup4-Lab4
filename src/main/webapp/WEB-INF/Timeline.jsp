@@ -23,46 +23,57 @@
                 });
 
                 // Submit post via AJAX
-                $('#btnSubmitPost').click(function (event) {
-                    event.preventDefault();
+               $('#btnSubmitPost').click(function (event) {
+                event.preventDefault();
 
-                    var selectedType = $('#postTypeSelect').val();
-                    var postData = {
-                        type: selectedType,
-                        content: $('#postContent').val()
-                    };
+                var selectedType = $('#postTypeSelect').val();
+                var formData = new FormData();
+                formData.append('type', selectedType);
+                formData.append('content', $('#postContent').val());
 
-                    if (selectedType === 'recipe') {
-                        postData.title = $('#recipeTitle').val();
-                        postData.servings = $('#recipeServings').val();
-                        postData.cookingTime = $('#recipeCookingTime').val();
-                        postData.ingredients = $('#recipeIngredients').val();
-                        postData.instructions = $('#recipeInstructions').val();
-                    } else if (selectedType === 'review') {
-                        postData.reviewTitle = $('#reviewTitle').val();
-                        postData.reviewName = $('#reviewName').val();
-                        postData.location = $('#reviewLocation').val();
-                        postData.rating = $('#reviewRating').val();
-                    }
+                var imageFile = $('#postImage')[0].files[0];
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
 
-                    $.post("AddPost", postData, function () {
-                        // Reset form fields
-                        $('#postContent').val('');
-                        $('#recipeTitle').val('');
-                        $('#recipeServings').val('');
-                        $('#recipeCookingTime').val('');
-                        $('#recipeIngredients').val('');
-                        $('#recipeInstructions').val('');
-                        $('#reviewTitle').val('');
-                        $('#reviewName').val('');
-                        $('#reviewLocation').val('');
-                        $('#reviewRating').val('5');
+                if (selectedType === 'recipe') {
+                    formData.append('title', $('#recipeTitle').val());
+                    formData.append('servings', $('#recipeServings').val());
+                    formData.append('cookingTime', $('#recipeCookingTime').val());
+                    formData.append('ingredients', $('#recipeIngredients').val());
+                    formData.append('instructions', $('#recipeInstructions').val());
+                } else if (selectedType === 'review') {
+                    formData.append('reviewTitle', $('#reviewTitle').val());
+                    formData.append('reviewName', $('#reviewName').val());
+                    formData.append('location', $('#reviewLocation').val());
+                    formData.append('rating', $('#reviewRating').val());
+                }
 
-                        // Hide container and reload feed
-                        $('#shareFormContainer').slideUp(250);
-                        $('#iterator').load('Posts');
-                    });
+                $.ajax({
+                    url: 'AddPost',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false
+                }).done(function () {
+                    // Reset form fields
+                    $('#postContent').val('');
+                    $('#recipeTitle').val('');
+                    $('#recipeServings').val('');
+                    $('#recipeCookingTime').val('');
+                    $('#recipeIngredients').val('');
+                    $('#recipeInstructions').val('');
+                    $('#reviewTitle').val('');
+                    $('#reviewName').val('');
+                    $('#reviewLocation').val('');
+                    $('#reviewRating').val('5');
+                    $('#postImage').val('');
+
+                    // Hide container and reload feed
+                    $('#shareFormContainer').slideUp(250);
+                    $('#iterator').load('Posts');
                 });
+            });
             });
         </script>
 
@@ -70,7 +81,7 @@
             style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
             <div>
                 <h1 style="margin:0; font-family:'Pacifico',cursive; color:#46331F; font-size:28px;">Feed</h1>
-                <p style="margin:4px 0 0; color:#CE9C6A; font-size:13px; font-weight:600;">Discover and share amazing
+                <p style="margin:4px 0 0; color:#7A5533; font-size:13px; font-weight:600;">Discover and share amazing
                     recipes and reviews</p>
             </div>
 
@@ -94,7 +105,7 @@
                 <form>
                     <div style="margin-bottom: 12px;">
                         <label
-                            style="font-size: 12px; font-weight: 600; color: #CE9C6A; display: block; margin-bottom: 4px;">
+                            style="font-size: 12px; font-weight: 600; color:#7A5533; display: block; margin-bottom: 4px;">
                             <i class="fa fa-tag"></i> Post Type
                         </label>
                         <select id="postTypeSelect"
@@ -200,6 +211,13 @@
                             placeholder="Describe the recipe, write the review detail, or post a comment..." rows="3"
                             required
                             style="width: 100%; padding: 10px 14px; border: 1.5px solid #CE9C6A; border-radius: 10px; font-size: 13px; outline: none; color: #46331F; resize: vertical;"></textarea>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 12px; font-weight: 600; color: #46331F; display: block; margin-bottom: 4px;">
+                            <i class="fa fa-image"></i> Photo (optional)
+                        </label>
+                        <input type="file" id="postImage" accept="image/*"
+                            style="width: 100%; font-size: 13px; color: #46331F;" />
                     </div>
 
                     <div style="display: flex; justify-content: flex-end;">
