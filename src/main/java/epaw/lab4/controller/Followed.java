@@ -35,7 +35,7 @@ public class Followed extends HttpServlet {
 			if (user!= null) {
 				try {
 					UserService userService = UserService.getInstance();
-					users = userService.getFollowedUsers(user.getId(),0,4);
+					users = userService.getFollowedUsers(user.getId(), 0, 500);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

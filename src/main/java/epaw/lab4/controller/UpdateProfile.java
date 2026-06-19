@@ -37,12 +37,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     User user = (User) session.getAttribute("user");
 
+    user.setFirstName(request.getParameter("firstName"));
+    user.setLastName(request.getParameter("lastName"));
+    user.setEmail(request.getParameter("email"));
+    user.setDateOfBirth(request.getParameter("dateOfBirth"));
     user.setBio(request.getParameter("bio"));
     user.setPhone(request.getParameter("phone"));
     user.setGender(request.getParameter("gender"));
     user.setAllergies(request.getParameter("allergies"));
     user.setTitle(request.getParameter("title"));
-   String[] prefs = request.getParameterValues("foodPreferences");
+    String[] prefs = request.getParameterValues("foodPreferences");
     user.setFoodPreferences(prefs != null ? String.join(",", prefs) : "");
 
     // Handle picture upload

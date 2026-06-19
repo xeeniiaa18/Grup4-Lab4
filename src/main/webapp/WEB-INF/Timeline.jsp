@@ -3,7 +3,10 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                $('#iterator').load('Posts');
+                // Respect whatever feed tab was last active (set by App.feedFilter)
+                var initialFilter = App.feedFilter || null;
+                var initialUrl = initialFilter ? 'Posts?filter=' + initialFilter : 'Posts';
+                $('#iterator').load(initialUrl);
 
                 // Toggle post creation form
                 $('#btnShowShare').click(function () {
@@ -71,11 +74,49 @@
 
                     // Hide container and reload feed
                     $('#shareFormContainer').slideUp(250);
-                    $('#iterator').load('Posts');
+                    var reloadUrl = App.feedFilter ? 'Posts?filter=' + App.feedFilter : 'Posts';
+                    $('#iterator').load(reloadUrl);
                 });
             });
             });
         </script>
+
+        <%-- Feed tabs: only show "Following" tab when logged in --%>
+        <c:if test="${not empty user}">
+            <div style="display:flex;border-bottom:2px solid #f0e8df;margin-bottom:16px;">
+                <button id="tabForYou"
+                    onclick="App.switchFeedTab(null)"
+                    style="flex:1;padding:10px;background:none;border:none;font-weight:700;font-size:14px;color:#E46B39;border-bottom:3px solid #E46B39;cursor:pointer;">
+                    For You
+                </button>
+                <button id="tabFollowing"
+                    onclick="App.switchFeedTab('following')"
+                    style="flex:1;padding:10px;background:none;border:none;font-weight:700;font-size:14px;color:#7A5533;border-bottom:3px solid transparent;cursor:pointer;">
+                    Following
+                </button>
+            </div>
+            <script>
+            App.switchFeedTab = function(filter) {
+                App.feedFilter = filter;
+                App.currentPage = 0;
+                App._removeLoadMoreBtn();
+                var url = filter ? 'Posts?filter=' + filter : 'Posts';
+                $('#tabForYou').css({'color': filter ? '#7A5533' : '#E46B39',
+                    'border-bottom-color': filter ? 'transparent' : '#E46B39'});
+                $('#tabFollowing').css({'color': filter === 'following' ? '#E46B39' : '#7A5533',
+                    'border-bottom-color': filter === 'following' ? '#E46B39' : 'transparent'});
+                $('#iterator').load(url, function(){ App._ensureLoadMoreBtn(); });
+            };
+            // Restore active tab styling on load
+            (function(){
+                var f = App.feedFilter;
+                if(f === 'following'){
+                    $('#tabFollowing').css({'color':'#E46B39','border-bottom-color':'#E46B39'});
+                    $('#tabForYou').css({'color':'#7A5533','border-bottom-color':'transparent'});
+                }
+            })();
+            </script>
+        </c:if>
 
         <div
             style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px;">

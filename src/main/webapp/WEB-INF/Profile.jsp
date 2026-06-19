@@ -46,8 +46,28 @@
 
                         <hr style="border:none;border-top:1px solid #f0e8df;margin-bottom:24px;">
 
-                        <form method="post" action="UpdateProfile">
+                        <form method="post" action="UpdateProfile" enctype="multipart/form-data">
 
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                                <div>
+                                    <label style="font-size:12px;font-weight:700;color:#46331F;">First Name</label>
+                                    <input type="text" name="firstName" value="${fn:escapeXml(sessionScope.user.firstName)}"
+                                        placeholder="First name" required
+                                        style="width:100%;padding:9px 12px;border:1.5px solid #CE9C6A;border-radius:10px;font-size:13px;color:#46331F;margin-top:4px;box-sizing:border-box;">
+                                </div>
+                                <div>
+                                    <label style="font-size:12px;font-weight:700;color:#46331F;">Last Name</label>
+                                    <input type="text" name="lastName" value="${fn:escapeXml(sessionScope.user.lastName)}"
+                                        placeholder="Last name" required
+                                        style="width:100%;padding:9px 12px;border:1.5px solid #CE9C6A;border-radius:10px;font-size:13px;color:#46331F;margin-top:4px;box-sizing:border-box;">
+                                </div>
+                            </div>
+                            <div style="margin-bottom:14px;">
+                                <label style="font-size:12px;font-weight:700;color:#46331F;">Email</label>
+                                <input type="email" name="email" value="${fn:escapeXml(sessionScope.user.email)}"
+                                    placeholder="your@email.com" required
+                                    style="width:100%;padding:9px 12px;border:1.5px solid #CE9C6A;border-radius:10px;font-size:13px;color:#46331F;margin-top:4px;box-sizing:border-box;">
+                            </div>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
                                 <div>
                                     <label style="font-size:12px;font-weight:700;color:#46331F;">Title / Role</label>
@@ -82,10 +102,17 @@
                             </div>
 
                             <div style="margin-bottom:14px;">
-                                <label style="font-size:12px;font-weight:700;color:#46331F;">Profile picture URL</label>
-                                <input type="text" name="picture" value="${fn:escapeXml(sessionScope.user.picture)}"
-                                    placeholder="https://..."
-                                    style="width:100%;padding:9px 12px;border:1.5px solid #CE9C6A;border-radius:10px;font-size:13px;color:#46331F;margin-top:4px;box-sizing:border-box;">
+                                <label style="font-size:12px;font-weight:700;color:#46331F;">Profile Picture</label>
+                                <c:if test="${not empty sessionScope.user.picture}">
+                                    <div style="margin:6px 0 8px;">
+                                        <img src="${fn:escapeXml(sessionScope.user.picture)}" class="w3-circle"
+                                            style="width:50px;height:50px;object-fit:cover;border:2px solid #E46B39;" alt="Current picture">
+                                        <span style="font-size:11px;color:#7A5533;margin-left:8px;">Current picture</span>
+                                    </div>
+                                </c:if>
+                                <input type="file" name="picture" accept="image/*"
+                                    style="width:100%;font-size:13px;color:#46331F;margin-top:4px;">
+                                <span style="font-size:11px;color:#7A5533;">Leave empty to keep current picture.</span>
                             </div>
 
                             <div style="margin-bottom:14px;">

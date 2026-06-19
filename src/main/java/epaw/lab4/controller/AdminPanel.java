@@ -60,6 +60,19 @@ public class AdminPanel extends HttpServlet {
             case "deletePost": PostRepository.getInstance().adminDelete(id); break;
             case "acceptVerification": VerificationRequestRepository.getInstance().accept(id); break;
             case "rejectVerification": VerificationRequestRepository.getInstance().reject(id); break;
+            case "editUser": {
+                epaw.lab4.model.User target = UserRepository.getInstance().findById(id).orElse(null);
+                if (target != null) {
+                    String fn = request.getParameter("firstName");
+                    String ln = request.getParameter("lastName");
+                    String em = request.getParameter("email");
+                    if (fn != null && !fn.trim().isEmpty()) target.setFirstName(fn.trim());
+                    if (ln != null && !ln.trim().isEmpty()) target.setLastName(ln.trim());
+                    if (em != null && !em.trim().isEmpty()) target.setEmail(em.trim());
+                    UserRepository.getInstance().update(target);
+                }
+                break;
+            }
         }
     }
 

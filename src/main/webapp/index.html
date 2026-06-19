@@ -291,6 +291,37 @@
 					});
 				}
 			});
+			/* Toggle edit panel */
+			$(document).on("click", ".editPost", function (event) {
+				event.preventDefault();
+				var postId = $(this).closest('.w3-card').attr('id');
+				$('#edit-panel-' + postId).slideToggle(200);
+			});
+
+			/* Cancel edit */
+			$(document).on("click", ".cancelEdit", function (event) {
+				event.preventDefault();
+				var postId = $(this).closest('.w3-card').attr('id');
+				$('#edit-panel-' + postId).slideUp(200);
+			});
+
+			/* Submit edit form */
+			$(document).on("submit", ".editPostForm", function (event) {
+				event.preventDefault();
+				var fd = new FormData(this);
+				var postId = $(this).closest('.w3-card').attr('id');
+				$.ajax({
+					url: 'EditPost',
+					type: 'POST',
+					data: fd,
+					processData: false,
+					contentType: false
+				}).done(function () {
+					$('#edit-panel-' + postId).slideUp(200);
+					refreshFeed();
+				});
+			});
+
 		};
 
 		$(document).ready(function () {

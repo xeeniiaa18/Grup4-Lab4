@@ -174,6 +174,102 @@ public class PostRepository extends BaseRepository {
         return Optional.empty();
     }
 
+
+    public Optional<List<Post>> findFollowingFeed(Integer currentUserId, Integer start, Integer end) {
+        List<Post> posts = new ArrayList<>();
+        String query = "SELECT p.id, p.uid, p.pid, p.type, p.text, p.image, p.created_at, " +
+                "u.username, u.firstName, u.lastName, u.picture AS upicture, " +
+                "r.title AS recipe_title, r.servings, r.cooking_time, r.ingredients, r.instructions, " +
+                "rev.title AS review_title, rev.name AS review_name, rev.location, rev.rating, " +
+                "(SELECT COUNT(*) FROM likes WHERE likes.pid = p.id) AS likes_count, " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.pid = p.id AND l.uid = ?) AS liked_by_me, " +
+                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me, " +
+                "(SELECT COUNT(*) FROM posts c WHERE c.pid = p.id AND c.type = 'comment') AS comments_count " +
+                "FROM posts p " +
+                "INNER JOIN users u ON p.uid = u.id " +
+                "LEFT JOIN recipes r ON p.id = r.pid " +
+                "LEFT JOIN reviews rev ON p.id = rev.pid " +
+                "WHERE p.type != 'comment' AND p.uid IN (SELECT fid FROM follows WHERE uid = ?) " +
+                "ORDER BY p.created_at DESC LIMIT ?, ?;";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, currentUserId != null ? currentUserId : 0);
+            statement.setInt(2, currentUserId != null ? currentUserId : 0);
+            statement.setInt(3, currentUserId != null ? currentUserId : 0);
+            statement.setInt(4, start);
+            statement.setInt(5, end);
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    posts.add(mapResultSetToPost(rs));
+                }
+                return Optional.of(posts);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Post> findById(Integer id, Integer currentUserId) {
+        String query = "SELECT p.id, p.uid, p.pid, p.type, p.text, p.image, p.created_at, " +
+                "u.username, u.firstName, u.lastName, u.picture AS upicture, " +
+                "r.title AS recipe_title, r.servings, r.cooking_time, r.ingredients, r.instructions, " +
+                "rev.title AS review_title, rev.name AS review_name, rev.location, rev.rating, " +
+                "(SELECT COUNT(*) FROM likes WHERE likes.pid = p.id) AS likes_count, " +
+                "(SELECT COUNT(*) FROM likes l WHERE l.pid = p.id AND l.uid = ?) AS liked_by_me, " +
+                "(SELECT COUNT(*) FROM saved_posts s WHERE s.pid = p.id AND s.uid = ?) AS saved_by_me, " +
+                "(SELECT COUNT(*) FROM posts c WHERE c.pid = p.id AND c.type = 'comment') AS comments_count " +
+                "FROM posts p " +
+                "INNER JOIN users u ON p.uid = u.id " +
+                "LEFT JOIN recipes r ON p.id = r.pid " +
+                "LEFT JOIN reviews rev ON p.id = rev.pid " +
+                "WHERE p.id = ?;";
+        try (PreparedStatement statement = db.prepareStatement(query)) {
+            statement.setInt(1, currentUserId != null ? currentUserId : 0);
+            statement.setInt(2, currentUserId != null ? currentUserId : 0);
+            statement.setInt(3, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapResultSetToPost(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
+    public void updatePost(Post post) {
+        String query = "UPDATE posts SET text = ? WHERE id = ? AND uid = ?";
+        try (PreparedStatement st = db.prepareStatement(query)) {
+            st.setString(1, post.getContent());
+            st.setInt(2, post.getId());
+            st.setInt(3, post.getUid());
+            st.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+        if ("recipe".equalsIgnoreCase(post.getType())) {
+            String rq = "UPDATE recipes SET title=?, servings=?, cooking_time=?, ingredients=?, instructions=? WHERE pid=?";
+            try (PreparedStatement st = db.prepareStatement(rq)) {
+                st.setString(1, post.getTitle());
+                if (post.getServings() != null) st.setInt(2, post.getServings()); else st.setNull(2, java.sql.Types.INTEGER);
+                if (post.getCookingTime() != null) st.setInt(3, post.getCookingTime()); else st.setNull(3, java.sql.Types.INTEGER);
+                st.setString(4, post.getIngredients());
+                st.setString(5, post.getInstructions());
+                st.setInt(6, post.getId());
+                st.executeUpdate();
+            } catch (SQLException e) { e.printStackTrace(); }
+        } else if ("review".equalsIgnoreCase(post.getType())) {
+            String rq = "UPDATE reviews SET title=?, name=?, location=?, rating=? WHERE pid=?";
+            try (PreparedStatement st = db.prepareStatement(rq)) {
+                st.setString(1, post.getReviewTitle());
+                st.setString(2, post.getReviewName());
+                st.setString(3, post.getLocation());
+                if (post.getRating() != null) st.setDouble(4, post.getRating()); else st.setNull(4, java.sql.Types.DOUBLE);
+                st.setInt(5, post.getId());
+                st.executeUpdate();
+            } catch (SQLException e) { e.printStackTrace(); }
+        }
+    }
+
     public Optional<List<Post>> findSavedByUser(Integer uid, Integer start, Integer end) {
         List<Post> posts = new ArrayList<>();
         String query = "SELECT p.id, p.uid, p.pid, p.type, p.text, p.image, p.created_at, " +

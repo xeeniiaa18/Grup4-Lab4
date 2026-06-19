@@ -241,6 +241,18 @@
                                                                                             Delete
                                                                                         </button>
                                                                                     </c:if>
+                                                                                    <%-- Edit (owner only) --%>
+                                                                                    <c:if test="${post.uid == user.id or user.role == 'admin'}">
+                                                                                        <button type="button"
+                                                                                            class="editPost"
+                                                                                            aria-label="Edit post"
+                                                                                            style="background:none;border:none;color:#3D7A5A;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;padding:5px 9px;border-radius:8px;transition:0.2s;"
+                                                                                            onmouseover="this.style.backgroundColor='#e8f5ee';"
+                                                                                            onmouseout="this.style.backgroundColor='transparent';">
+                                                                                            <i class="fa fa-pencil"></i>
+                                                                                            Edit
+                                                                                        </button>
+                                                                                    </c:if>
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <span style="color:#7A5533;font-size:12px;">
@@ -252,6 +264,67 @@
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
+
+                                                        <%-- Edit panel (collapsed by default, owner only) --%>
+                                                        <c:if test="${not empty user and (post.uid == user.id or user.role == 'admin')}">
+                                                        <div id="edit-panel-${post.id}" style="display:none;padding-top:12px;margin-top:4px;border-top:1px solid #f0e8df;">
+                                                            <form class="editPostForm" data-pid="${post.id}" data-type="${post.type}">
+                                                                <input type="hidden" name="id" value="${post.id}">
+                                                                <input type="hidden" name="type" value="${post.type}">
+
+                                                                <c:if test="${post.type == 'recipe'}">
+                                                                    <input type="text" name="title" value="${fn:escapeXml(post.title)}" placeholder="Recipe title"
+                                                                        style="width:100%;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;margin-bottom:6px;box-sizing:border-box;">
+                                                                    <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                                                        <input type="number" name="servings" value="${post.servings}" placeholder="Servings" min="1"
+                                                                            style="flex:1;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;box-sizing:border-box;">
+                                                                        <input type="number" name="cookingTime" value="${post.cookingTime}" placeholder="Cook time (min)" min="1"
+                                                                            style="flex:1;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;box-sizing:border-box;">
+                                                                    </div>
+                                                                    <textarea name="ingredients" rows="2" placeholder="Ingredients"
+                                                                        style="width:100%;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;margin-bottom:6px;box-sizing:border-box;resize:vertical;"><c:out value="${post.ingredients}"/></textarea>
+                                                                    <textarea name="instructions" rows="3" placeholder="Instructions"
+                                                                        style="width:100%;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;margin-bottom:6px;box-sizing:border-box;resize:vertical;"><c:out value="${post.instructions}"/></textarea>
+                                                                </c:if>
+                                                                <c:if test="${post.type == 'review'}">
+                                                                    <input type="text" name="reviewTitle" value="${fn:escapeXml(post.reviewTitle)}" placeholder="Review title"
+                                                                        style="width:100%;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;margin-bottom:6px;box-sizing:border-box;">
+                                                                    <div style="display:flex;gap:8px;margin-bottom:6px;">
+                                                                        <input type="text" name="reviewName" value="${fn:escapeXml(post.reviewName)}" placeholder="Restaurant/dish"
+                                                                            style="flex:1;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;box-sizing:border-box;">
+                                                                        <input type="text" name="location" value="${fn:escapeXml(post.location)}" placeholder="Location"
+                                                                            style="flex:1;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;box-sizing:border-box;">
+                                                                    </div>
+                                                                    <select name="rating" style="width:100%;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;margin-bottom:6px;box-sizing:border-box;">
+                                                                        <option value="5.0" ${post.rating == 5.0 ? 'selected' : ''}>★★★★★ 5.0</option>
+                                                                        <option value="4.5" ${post.rating == 4.5 ? 'selected' : ''}>★★★★½ 4.5</option>
+                                                                        <option value="4.0" ${post.rating == 4.0 ? 'selected' : ''}>★★★★ 4.0</option>
+                                                                        <option value="3.5" ${post.rating == 3.5 ? 'selected' : ''}>★★★½ 3.5</option>
+                                                                        <option value="3.0" ${post.rating == 3.0 ? 'selected' : ''}>★★★ 3.0</option>
+                                                                        <option value="2.5" ${post.rating == 2.5 ? 'selected' : ''}>★★½ 2.5</option>
+                                                                        <option value="2.0" ${post.rating == 2.0 ? 'selected' : ''}>★★ 2.0</option>
+                                                                        <option value="1.5" ${post.rating == 1.5 ? 'selected' : ''}>★½ 1.5</option>
+                                                                        <option value="1.0" ${post.rating == 1.0 ? 'selected' : ''}>★ 1.0</option>
+                                                                        <option value="0.5" ${post.rating == 0.5 ? 'selected' : ''}>½ 0.5</option>
+                                                                    </select>
+                                                                </c:if>
+                                                                <textarea name="content" rows="2" placeholder="Description / text body"
+                                                                    style="width:100%;padding:7px 12px;border:1.5px solid #CE9C6A;border-radius:8px;font-size:13px;margin-bottom:6px;box-sizing:border-box;resize:vertical;"><c:out value="${post.content}"/></textarea>
+                                                                <input type="file" name="image" accept="image/*"
+                                                                    style="font-size:12px;color:#46331F;margin-bottom:8px;">
+                                                                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                                                                    <button type="button" class="cancelEdit"
+                                                                        style="background:none;border:1.5px solid #CE9C6A;color:#7A5533;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">
+                                                                        Cancel
+                                                                    </button>
+                                                                    <button type="submit"
+                                                                        style="background:#3D7A5A;color:white;border:none;border-radius:8px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;">
+                                                                        <i class="fa fa-save"></i> Save
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        </c:if>
 
                                                         <%-- Comments panel (collapsed by default) --%>
                                                             <div id="comments-panel-${post.id}"

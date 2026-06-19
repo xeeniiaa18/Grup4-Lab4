@@ -34,6 +34,19 @@ public class PostService {
         return instance();
     }
 
+
+    public List<Post> getFollowingFeed(Integer currentUserId, Integer start, Integer end) {
+        return postRepository.findFollowingFeed(currentUserId, start, end).orElse(null);
+    }
+
+    public Post getPostById(Integer id, Integer currentUserId) {
+        return postRepository.findById(id, currentUserId).orElse(null);
+    }
+
+    public void update(Post post) {
+        postRepository.updatePost(post);
+    }
+
     public void add(Post post, String authorUsername) {
         postRepository.save(post);
 

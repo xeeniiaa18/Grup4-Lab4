@@ -66,6 +66,8 @@ public class Posts extends HttpServlet {
                 return;
             }
             posts = postService.getPostsByUser(uid, currentUserId, start, count);
+        } else if ("following".equalsIgnoreCase(filter) && currentUserId != null) {
+            posts = postService.getFollowingFeed(currentUserId, start, count);
         } else {
             // Default: all public posts (global feed)
             posts = postService.getAllPosts(currentUserId, start, count);
