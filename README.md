@@ -50,10 +50,10 @@ Go to `http://localhost:8080`, click **Register** in the left menu and fill in t
 
 | Field | User A | User B |
 |---|---|---|
-| Username | `alice` | `bob` |
+| Username | `alice` | `bobby` |
 | First name | Alice | Bob |
 | Last name | Smith | Jones |
-| Email | alice@test.com | bob@test.com |
+| Email | alice@test.com | bobby@test.com |
 | Password | `Test1234!` | `Test1234!` |
 | Date of birth | any | any |
 
